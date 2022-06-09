@@ -1,0 +1,50 @@
+
+#item{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  border:solid 1px;
+  border-radius: 10px;
+  width: 220px;
+  height: 340px;
+  margin: 10px;
+  transition: all 0.2s;
+
+  &:hover {
+    cursor: pointer;
+    background-color: darken(#fff, 5%);
+    #cartBtn {
+      background-color: darken(#fff, 5%);;
+  }
+  }
+
+  #img {
+    height: 190px;
+    width: 180px;
+    object-fit: cover;
+  }
+  #name{
+    max-height: 16px;
+    width: 200px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  #price{
+    display: flex;
+    justify-content: space-between;
+    font-size: 27px;
+    width: 150px;
+    button{
+      border:none;
+      color:green;
+      background-color: white;
+      &:hover{
+        transition: 0.2s;
+        background-color: rgb(196, 196, 196);
+        cursor: pointer;
+      }
+    }
+  }
+
+}

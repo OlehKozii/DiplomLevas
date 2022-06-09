@@ -1,0 +1,69 @@
+import React from "react";
+import {
+  ADMIN_ROUTE,
+  LOGIN_ROUTE,
+  REGISTRATION_ROUTE,
+  SHOP_ROUTE,
+  BASKET_ROUTE,
+  GOOD_ROUTE,
+  MAIN_ROUTE,
+  NEWS_ROUTE,
+  SIGN_UP,
+  SIGN_IN
+} from "./const";
+
+const Admin = React.lazy(() => import("../pages/admin"));
+const Auth = React.lazy(() => import("../pages/auth"));
+const Basket = React.lazy(() => import("../pages/basket"));
+const Good = React.lazy(() => import("../pages/goodsPage"));
+const Shop = React.lazy(() => import("../pages/shop/shop"));
+const Main = React.lazy(() => import("../pages/Main"));
+const News = React.lazy(() => import("../pages/news"));
+
+// import Admin  from "../pages/admin"
+// import Shop from "../pages/shop"
+// import Basket from "../pages/basket"
+// import Good from "../pages/goodsPage"
+// import Auth from "../pages/auth"
+
+export const authRoutes = [
+  {
+    path: ADMIN_ROUTE,
+    element: <Admin />,
+  },
+  {
+    path: BASKET_ROUTE,
+    element: <Basket />,
+  },
+];
+
+export const publicRoutes = [
+  {
+    path: MAIN_ROUTE,
+    element: <Main />,
+  },
+  {
+    path: NEWS_ROUTE,
+    element: <News />,
+  },
+  {
+    path: LOGIN_ROUTE,
+    element: <Auth />,
+  },
+  {
+    path: REGISTRATION_ROUTE,
+    element: <Auth />,
+  },
+  {
+    path: SHOP_ROUTE,
+    element: <Shop />,
+  },
+  {
+    path: GOOD_ROUTE + "/:id",
+    element: <Good />,
+  },
+  {
+    path: SIGN_UP,
+    element: <Good />,
+  },
+];

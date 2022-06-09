@@ -1,0 +1,31 @@
+.bel{
+    &:hover{
+        color:blue
+    }
+}
+
+#nav {
+    
+    // position: absolute;
+    // top: 0;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(41, 41, 41);
+    height: 60px;
+    padding: 20px;
+    .logo{
+        font-size: large;
+    }
+    & > div {
+        display: flex;
+    } 
+}
+
+#leftSide a,
+#rightSide a {
+    margin: 0 5px;
+    color: #fff;
+    text-decoration: none;
+}

@@ -1,5 +1,5 @@
-const {type} = require("../models/goodsModel")
 const {v4} =require("uuid")
+const {type} = require("../models/goodsModel")
 const err = require("../errors/err")
 
 class typeController{

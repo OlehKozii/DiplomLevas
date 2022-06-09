@@ -1,0 +1,33 @@
+#wrapper{
+  display:flex;
+  justify-content: center;
+  #container {
+    display: grid;
+    grid-template-columns: 260px 260px 260px 260px 260px;
+    justify-content: center;
+  }
+
+  @media (max-width: 1320px) {
+    #container {
+      grid-template-columns: 260px 260px 260px 260px;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    #container {
+      grid-template-columns: 260px 260px 260px;
+    }
+  }
+
+  @media (max-width: 820px) {
+    #container {
+     grid-template-columns: 260px 260px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    #container {
+      grid-template-columns: 260px;
+    }
+  }
+}
