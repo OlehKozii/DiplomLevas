@@ -6,10 +6,6 @@ const News = () => {
     return (
         <div>
             <p>News Page</p>
-
-            <div>
-                <OneProduct />
-            </div>
         </div>
     )
 }
