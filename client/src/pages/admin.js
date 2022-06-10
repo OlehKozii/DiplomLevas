@@ -7,6 +7,7 @@ import Users from '../components/admin/Users'
 import Orders from '../components/admin/Orders'
 import AddArticle from '../components/admin/AddArticle'
 import EditArticle from '../components/admin/EditArticle'
+import axios from 'axios'
 
 const Admin = () => {
     const [page, setPage] = useState('Products')
@@ -26,7 +27,10 @@ const Admin = () => {
     const { isOpen: isEditArticleOpen, onOpen: onEditArticleOpen, onClose: onEditArticleClose } = useDisclosure()
 
     async function getData(url, cb) {
-        const response = await axios()
+        const response = await axios.get(url);
+        if (response.status === 200) {
+            cb();
+        }
     }
 
     return (

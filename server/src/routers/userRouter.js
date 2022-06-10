@@ -6,6 +6,7 @@ const checkRole = require("../middleware/authMiddleware")
 
 router.post('/registration', userController.registration)
 router.post('/login', userController.login)
+router.get('/allUsers', checkAuth, checkRole, userController.getAllUsers)
 router.post('/createArticle', checkAuth, checkRole, userController.createArticle)
 router.put('/editarticle/:id', checkAuth, checkRole, userController.editArticle)
 router.get('/articles', userController.getArticles)

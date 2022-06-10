@@ -52,6 +52,16 @@ class userController {
         }
     }
 
+    async getAllUsers(req, res, next) {
+        try {
+            const users = user.find({}).exec();
+            res.send(users);
+        } catch (e) {
+            console.log(e);
+            return next(err.badRequest("Cannot create article"));
+        }
+    }
+
     async createArticle(req, res, next) {
         try {
             const { header, text } = req.body;

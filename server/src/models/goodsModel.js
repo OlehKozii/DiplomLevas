@@ -7,14 +7,14 @@ const goodsSchema = new Schema({
     typeID: { type: String, required: true },
     price: { type: Number, required: true, min: 1 },
     discount: { type: Number, min: 0 },
-    params: [{ type: Schema.Types.ObjectId, ref: "param" }],
+    params: [{
+        title: { type: String, required: true },
+        description: { type: String, required: true }
+    }],
     image: { type: String, required: true }
 })
 
-const paramsSchema = new Schema({
-    title: { type: String, required: true },
-    description: { type: String, required: true }
-})
+
 
 const typeSchema = new Schema({
     id: { type: String, required: true },
@@ -54,11 +54,10 @@ const orderSchema = new Schema({
 
 
 const goods = mongoose.model('good', goodsSchema)
-const param = mongoose.model('param', paramsSchema)
 const type = mongoose.model('type', typeSchema)
 const brand = mongoose.model('brand', brandSchema)
 const rating = mongoose.model('rating', ratingSchema)
 const article = mongoose.model('article', articleSchema)
 const order = mongoose.model('order', orderSchema)
 
-module.exports = { goods, param, type, brand, rating, article, order }
+module.exports = { goods, type, brand, rating, article, order }
