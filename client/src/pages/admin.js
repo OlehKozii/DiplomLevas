@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container, Center, Heading, Menu, MenuButton, MenuItem, MenuList, useDisclosure, Button, Flex, Text, Spacer } from '@chakra-ui/react'
 import NewProduct from '../components/admin/NewProduct'
 import EditProduct from '../components/admin/EditProduct'
@@ -10,13 +10,21 @@ import EditArticle from '../components/admin/EditArticle'
 import axios from 'axios'
 
 const Admin = () => {
-    const [page, setPage] = useState('Products')
+    const MAP = {
+        'Продукти': '',
+        'Користувачі': 'user/allUsers',
+        'Статті': '',
+        'Замовлення': '',
+    }
 
-    const [products, setProducts] = useState([]);
-    const [types, setTypes] = useState([]);
-    const [users, setUsers] = useState([]);
-    const [articles, setArticles] = useState([]);
-    const [orders, setOrders] = useState([]);
+    const [page, setPage] = useState('Продукти')
+
+    const [data, setData] = useState([])
+    // const [products, setProducts] = useState([]);
+    // const [types, setTypes] = useState([]);
+    // const [users, setUsers] = useState([]);
+    // const [articles, setArticles] = useState([]);
+    // const [orders, setOrders] = useState([]);
 
     const { isOpen: isNewProductOpen, onOpen: onNewProductOpen, onClose: onNewProductClose } = useDisclosure()
     const { isOpen: isEditProductOpen, onOpen: onEditProductOpen, onClose: onEditProductClose } = useDisclosure()
@@ -26,12 +34,21 @@ const Admin = () => {
     const { isOpen: isAddArticleOpen, onOpen: onAddArticleOpen, onClose: onAddArticleClose } = useDisclosure()
     const { isOpen: isEditArticleOpen, onOpen: onEditArticleOpen, onClose: onEditArticleClose } = useDisclosure()
 
-    async function getData(url, cb) {
-        const response = await axios.get(url);
+    async function getData(route) {
+        const response = await axios.get('https://mydiplomlevas.herokuapp.com/' + route, {
+            headers: {
+                'Authorization': localStorage.getItem('Token')
+            }
+        });
         if (response.status === 200) {
-            cb();
+            setData(response.data);
         }
     }
+
+    useEffect(() => {
+        setData([]);
+        getData(MAP[page]);
+    }, [page]);
 
     return (
         <Container display="flex" flexDirection="column" alignItems="center" p="30px">
@@ -41,10 +58,10 @@ const Admin = () => {
                 </MenuButton>
                 <Center>
                     <MenuList>
-                        <MenuItem onClick={() => setPage('Products')}>Продукти</MenuItem>
-                        <MenuItem onClick={() => setPage('Users')}>Користувачі</MenuItem>
-                        <MenuItem onClick={() => setPage('Orders')}>Замовлення</MenuItem>
-                        <MenuItem onClick={() => setPage('Articles')}>Статті</MenuItem>
+                        <MenuItem onClick={() => setPage('Продукти')}>Продукти</MenuItem>
+                        <MenuItem onClick={() => setPage('Користувачі')}>Користувачі</MenuItem>
+                        <MenuItem onClick={() => setPage('Замовлення')}>Замовлення</MenuItem>
+                        <MenuItem onClick={() => setPage('Статті')}>Статті</MenuItem>
                     </MenuList>
                 </Center>
             </Menu>
@@ -52,7 +69,7 @@ const Admin = () => {
 
 
 
-            {page === 'Products' &&
+            {page === 'Продукти' &&
                 <>
                     <Button onClick={onNewProductOpen}>Добавити новий продукт</Button>
                     <Button onClick={onEditProductOpen}>Редагувати продукт</Button>
@@ -60,27 +77,26 @@ const Admin = () => {
                 </>
             }
 
-            {page === 'Users' &&
+            {page === 'Користувачі' &&
                 <>
                     <Button onClick={onUsersOpen}>Список користувачів</Button>
                 </>
             }
 
-            {page === 'Orders' &&
+            {page === 'Замовлення' &&
                 <>
                     <Button onClick={onOrdersOpen}>Переглянути замовлення</Button>
                 </>
             }
 
-            {page === 'Articles' &&
+            {page === 'Статті' &&
                 <>
                     <Button onClick={onAddArticleOpen}>Добавити статтю</Button>
                     <Button onClick={onEditArticleOpen}>Редагувати статтю</Button>
                 </>
             }
 
-
-
+            {console.log(data)}
 
             <NewProduct
                 isOpen={isNewProductOpen}

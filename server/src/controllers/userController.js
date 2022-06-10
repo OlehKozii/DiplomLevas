@@ -54,7 +54,7 @@ class userController {
 
     async getAllUsers(req, res, next) {
         try {
-            const users = user.find({}).exec();
+            const users = await user.find({}).exec();
             res.send(users);
         } catch (e) {
             console.log(e);

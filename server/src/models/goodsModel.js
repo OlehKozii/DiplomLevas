@@ -3,7 +3,6 @@ const { Schema, model, mongoose } = require("mongoose")
 const goodsSchema = new Schema({
     id: { type: String, required: true, unique: true },
     name: { type: String, required: true },
-    brandID: { type: String, required: true },
     typeID: { type: String, required: true },
     price: { type: Number, required: true, min: 1 },
     discount: { type: Number, min: 0 },

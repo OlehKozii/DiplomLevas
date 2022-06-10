@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     useDisclosure,
     Button,
@@ -11,13 +11,18 @@ import {
     Input,
     FormLabel,
     ModalBody,
-    ModalFooter
+    ModalFooter,
+    Select
 } from "@chakra-ui/react";
+import axios from "axios";
+import { observer } from "mobx-react-lite";
 
-
-
-function NewProduct({ isOpen, onClose }) {
+const NewProduct = observer(({ isOpen, onClose }) => {
     const [info, setInfo] = useState([])
+    const [name, setName] = useState("")
+    const [price, setPrice] = useState(0)
+    const [typeID, setTypeID] = useState("")
+    const [types, setTypes] = useState([])
 
     const addInfo = () => {
         setInfo([...info, { title: '', description: '', number: Date.now() }])
@@ -29,6 +34,22 @@ function NewProduct({ isOpen, onClose }) {
     const changeInfo = (key, value, number) => {
         setInfo(info.map(i => i.number === number ? { ...i, [key]: value } : i))
     }
+
+    const submit = async () => {
+        const response = await axios.post('https://mydiplomlevas.herokuapp.com/good/create', {});
+        if (response.status === 200) {
+            navigator('/admin');
+        };
+    }
+
+    const getTypes = async () => {
+        const response = await axios.get('https://mydiplomlevas.herokuapp.com/type/getAll');
+        if (response.status === 200) setTypes(response.data);
+    }
+
+    useEffect(() => {
+        getTypes();
+    }, []);
 
     return (
         <>
@@ -57,7 +78,13 @@ function NewProduct({ isOpen, onClose }) {
                         </FormControl>
                         <FormControl>
                             <FormLabel>Тип</FormLabel>
-                            <Input placeholder='Тип' />
+                            <Select>
+                                {types.map(i =>
+                                    <option key={i.id}>{i.name}</option>
+                                )}
+
+
+                            </Select>
                         </FormControl>
                         <FormLabel></FormLabel>
                         <FormLabel>Властивості</FormLabel>
@@ -97,5 +124,5 @@ function NewProduct({ isOpen, onClose }) {
             </Modal>
         </>
     )
-}
+})
 export default NewProduct
