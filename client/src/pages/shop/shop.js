@@ -4,7 +4,7 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../../index";
 import styles from "./shop.module.scss";
 import axios from 'axios';
-
+import { Grid, GridItem, SimpleGrid } from "@chakra-ui/react";
 
 const Shop = () => {
     // const { good } = useContext(Context)
@@ -30,17 +30,19 @@ const Shop = () => {
     }, []);
 
     return (
-        <div id={styles.wrapper}>
-            <div id={styles.filters}>
+        <Grid p="30px" templateColumns="200px 1fr">
+            <GridItem id={styles.filters}>
                 {typesList.map(filter =>
                     <button key={filter.id} id={styles.filterBtn} onClick={() => console.log("Вибрано " + filter)}>{filter.name}</button>)}
-            </div>
-            <div id={styles.container}>
-                {goodsList.map((good) => (
-                    <OneProduct key={good.id} good={good} />
-                ))}
-            </div>
-        </div>
+            </GridItem>
+            <GridItem id={styles.container}>
+                <SimpleGrid minChildWidth='175px' spacing='20px'>
+                    {goodsList.map((good) => (
+                        <OneProduct key={good.id} param={good} />
+                    ))}
+                </SimpleGrid>
+            </GridItem>
+        </Grid>
     )
 }
 

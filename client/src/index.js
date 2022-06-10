@@ -4,6 +4,8 @@ import styles from "./index.module.scss";
 import App from "./App";
 import GoodStore from "./store/GoodStore";
 import UserStore from "./store/UserStore";
+import { ChakraProvider } from "@chakra-ui/react";
+import { Theme } from "./styles/theme";
 
 export const Context = createContext(null);
 
@@ -15,6 +17,8 @@ root.render(
       good: new GoodStore(),
     }}
   >
-    <App />
+    <ChakraProvider theme={Theme}>
+      <App />
+    </ChakraProvider>
   </Context.Provider>
 );

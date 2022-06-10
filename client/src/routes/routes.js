@@ -61,7 +61,7 @@ export const publicRoutes = [
     element: <Shop />,
   },
   {
-    path: GOOD_ROUTE + "/:id",
+    path: GOOD_ROUTE + "/:name",
     element: <Good />,
   },
   {

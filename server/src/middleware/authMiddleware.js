@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const err = require("../errors/err")
 const user = require("../models/userModel")
 
-module.exports = async function check(req, res, next) {
+module.exports = async function checkAuth(req, res, next) {
     try {
         const token = req.header('Authorization')?.replace('Bearer ')?.trim();
         if (!token) {
@@ -13,6 +13,7 @@ module.exports = async function check(req, res, next) {
         if (!candidate) {
             return next(err.forbidden("Unauthorized"));
         }
+        req.role = candidate.role;
         next();
     } catch (e) {
         return next(err.forbidden("Unauthorized"));

@@ -1,10 +1,18 @@
 import { makeAutoObservable } from "mobx";
 export default class GoodStore {
   constructor() {
+    this._id = '';
     this._types = [];
     this._brands = [];
     this._goods = [];
     makeAutoObservable(this);
+  }
+
+  get id() {
+    return this._id;
+  }
+  setId(value) {
+    this._id = value;
   }
 
   get types() {

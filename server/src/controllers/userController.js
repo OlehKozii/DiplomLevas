@@ -21,7 +21,6 @@ class userController {
                 name: req.body.name,
                 email: req.body.email,
                 password: _password,
-                role: req.body.role
             })
             await myuser.save()
             const token = generateToken(myuser.id, myuser.email, myuser.name, myuser.role)
@@ -45,11 +44,20 @@ class userController {
             if (!passwordCheck) {
                 return next(err.internal('Wrong password'))
             }
-            const token = generateToken(candidate.id, candidate.name, candidate.email, candidate.role)
+            const token = generateToken(candidate.id, candidate.email, candidate.name, candidate.role)
             return res.json({ token })
         } catch (error) {
             return res.send(error)
         }
+    }
+
+    async createArticle(req, res, next) {
+        const { header, text } = req.body
+
+    }
+
+    async deleteArticle(req, res, next) {
+
     }
 
 
