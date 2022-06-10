@@ -9,7 +9,14 @@ import AddArticle from '../components/admin/AddArticle'
 import EditArticle from '../components/admin/EditArticle'
 
 const Admin = () => {
-    // const [addGmodal, setAddGmodal] = useState(false)
+    const [page, setPage] = useState('Products')
+
+    const [products, setProducts] = useState([]);
+    const [types, setTypes] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [articles, setArticles] = useState([]);
+    const [orders, setOrders] = useState([]);
+
     const { isOpen: isNewProductOpen, onOpen: onNewProductOpen, onClose: onNewProductClose } = useDisclosure()
     const { isOpen: isEditProductOpen, onOpen: onEditProductOpen, onClose: onEditProductClose } = useDisclosure()
     const { isOpen: isAddProductTypeOpen, onOpen: onAddProductTypeOpen, onClose: onAddProductTypeClose } = useDisclosure()
@@ -18,29 +25,58 @@ const Admin = () => {
     const { isOpen: isAddArticleOpen, onOpen: onAddArticleOpen, onClose: onAddArticleClose } = useDisclosure()
     const { isOpen: isEditArticleOpen, onOpen: onEditArticleOpen, onClose: onEditArticleClose } = useDisclosure()
 
+    async function getData(url, cb) {
+        const response = await axios()
+    }
+
     return (
         <Container display="flex" flexDirection="column" alignItems="center" p="30px">
             <Menu >
-                <MenuButton width='70px' as={Button} >
-                    ...
+                <MenuButton width='120px' as={Button} >
+                    {page}
                 </MenuButton>
                 <Center>
                     <MenuList>
-                        <MenuItem>Продукти</MenuItem>
-                        <MenuItem>Типи</MenuItem>
-                        <MenuItem>Користувачі</MenuItem>
-                        <MenuItem>Замовлення</MenuItem>
+                        <MenuItem onClick={() => setPage('Products')}>Продукти</MenuItem>
+                        <MenuItem onClick={() => setPage('Users')}>Користувачі</MenuItem>
+                        <MenuItem onClick={() => setPage('Orders')}>Замовлення</MenuItem>
+                        <MenuItem onClick={() => setPage('Articles')}>Статті</MenuItem>
                     </MenuList>
                 </Center>
             </Menu>
 
-            <Button onClick={onNewProductOpen}>Добавити новий продукт</Button>
-            <Button onClick={onEditProductOpen}>Редагувати продукт</Button>
-            <Button onClick={onAddProductTypeOpen} >Добавити новий тип продукту</Button>
-            <Button onClick={onUsersOpen}>Список користувачів</Button>
-            <Button onClick={onOrdersOpen}>Переглянути замовлення</Button>
-            <Button onClick={onAddArticleOpen}>Добавити статтю</Button>
-            <Button onClick={onEditArticleOpen}>Редагувати статтю</Button>
+
+
+
+            {page === 'Products' &&
+                <>
+                    <Button onClick={onNewProductOpen}>Добавити новий продукт</Button>
+                    <Button onClick={onEditProductOpen}>Редагувати продукт</Button>
+                    <Button onClick={onAddProductTypeOpen} >Добавити новий тип продукту</Button>
+                </>
+            }
+
+            {page === 'Users' &&
+                <>
+                    <Button onClick={onUsersOpen}>Список користувачів</Button>
+                </>
+            }
+
+            {page === 'Orders' &&
+                <>
+                    <Button onClick={onOrdersOpen}>Переглянути замовлення</Button>
+                </>
+            }
+
+            {page === 'Articles' &&
+                <>
+                    <Button onClick={onAddArticleOpen}>Добавити статтю</Button>
+                    <Button onClick={onEditArticleOpen}>Редагувати статтю</Button>
+                </>
+            }
+
+
+
 
             <NewProduct
                 isOpen={isNewProductOpen}
