@@ -1,9 +1,35 @@
-import React, { Suspense } from "react";
+import axios from "axios";
+import { observer } from "mobx-react-lite";
+import React, { Suspense, useEffect, useContext, useState } from "react";
 import { BrowserRouter, Link } from "react-router-dom";
 import AppRouter from "./components/appRouter";
 import NavBar from "./components/NavBar/NavBar";
+import jwt_decode from "jwt-decode";
+import { Context } from ".";
 
-function App() {
+
+const App = observer(() => {
+
+  const { user } = useContext(Context)
+  const [loading, setLoading] = useState(true)
+
+  const check = async () => {
+    // const { data } = await axios.get('https://mydiplomlevas.herokuapp.com/user/auth')
+    const token = localStorage.getItem('Token')
+    if (token) return jwt_decode(token);
+    return undefined
+  }
+
+  useEffect(() => {
+    check().then(data => {
+      if (data) {
+        user.setUser(true)
+        user.setIsAuth(true)
+      }
+    }).finally(() => setLoading(false))
+  }, [user])
+
+
   return (
     <BrowserRouter>
       <Suspense>
@@ -15,6 +41,6 @@ function App() {
       </Suspense>
     </BrowserRouter>
   );
-}
+})
 
 export default App;

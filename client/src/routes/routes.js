@@ -19,6 +19,8 @@ const Good = React.lazy(() => import("../pages/goodsPage"));
 const Shop = React.lazy(() => import("../pages/shop/shop"));
 const Main = React.lazy(() => import("../pages/Main"));
 const News = React.lazy(() => import("../pages/news"));
+const SignUp = React.lazy(() => import("../pages/auth/SignUp"));
+const SignIn = React.lazy(() => import("../pages/auth/SignIn"));
 
 // import Admin  from "../pages/admin"
 // import Shop from "../pages/shop"
@@ -64,6 +66,10 @@ export const publicRoutes = [
   },
   {
     path: SIGN_UP,
-    element: <Good />,
+    element: <SignUp />,
   },
+  {
+    path: SIGN_IN,
+    element: <SignIn />,
+  }
 ];

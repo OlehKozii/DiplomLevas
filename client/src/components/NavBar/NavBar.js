@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FilterFramesIcon from '@mui/icons-material/FilterFrames';
 import { Link } from "react-router-dom";
-import { ADMIN_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE, BASKET_ROUTE, GOOD_ROUTE, MAIN_ROUTE, NEWS_ROUTE } from "../../routes/const";
-import UserStore from "../../store/UserStore";
+import { SHOP_ROUTE, BASKET_ROUTE, MAIN_ROUTE, NEWS_ROUTE, SIGN_IN } from "../../routes/const";
 
 const NavBar = observer(() => {
   const { user } = useContext(Context);
@@ -15,11 +14,7 @@ const NavBar = observer(() => {
   const logOut = () => {
     user.setUser({})
     user.setIsAuth(false)
-  }
-
-  const login = () => {
-    user.setUser({ id: 1 })
-    user.setIsAuth(true)
+    localStorage.removeItem('Token')
   }
 
   return (
@@ -39,10 +34,7 @@ const NavBar = observer(() => {
           </div>
           :
           <div>
-            <Link
-              // to={LOGIN_ROUTE}
-              to='/'
-              onClick={() => login()}>Логін</Link>
+            <Link to={SIGN_IN}>Логін</Link>
           </div>
         }
       </div>
