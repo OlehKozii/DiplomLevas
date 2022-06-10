@@ -10,6 +10,7 @@ const userSchema = new Schema({
         id: { type: String, required: true },
         count: { type: Number, required: true }
     }],
+    orders: [{ type: String }],
     ratings: [{ type: Schema.Types.ObjectId, ref: "rating" }]
     // ,
     // isActivated,

@@ -6,8 +6,13 @@ class typeController {
 
     async create(req, res, next) {
         const { name } = req.body
+        console.log(req.body)
         if (!name) {
             return next(err.badRequest("No type name!"))
+        }
+        const candidate = await type.findOne({ "name": name }).exec()
+        if (candidate) {
+            return next(err.badRequest("Such type already exist"))
         }
         const myType = new type({
             id: v4().toString(),
