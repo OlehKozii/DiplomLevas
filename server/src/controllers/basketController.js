@@ -8,7 +8,8 @@ const err = require("../errors/err")
 class basketController {
 
     async add(req, res, next) {
-        const { id, good } = req.body
+        const { good } = req.body;
+        const { id } = req.user
 
         if (!good) {
             return next(err.badRequest("No device data entered"))
@@ -39,7 +40,8 @@ class basketController {
     }
 
     async remove(req, res, next) {
-        const { id, goodId } = req.body
+        const { goodId } = req.body;
+        const { id } = req.user;
 
         if (!goodId) {
             return next(err.badRequest("No device data entered"))
@@ -60,7 +62,8 @@ class basketController {
     }
 
     async get(req, res, next) {
-        const { id } = req.body
+        const { id } = req.user
+        res.send(req.user);
         const result = await user.findOne({ id: id }).exec();
         if (result) {
             res.send(result.basket);
@@ -70,7 +73,7 @@ class basketController {
     }
 
     async removeall(req, res, next) {
-        const { id } = req.body
+        const { id } = req.user
 
         const result = await user.findOne({ id: id }).exec();
 
