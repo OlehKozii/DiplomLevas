@@ -15,7 +15,12 @@ const cyrillicToTranslit = new CyrillicToTranslit();
 const OneProduct = observer(({ param }) => {
     const navigator = useNavigate();
     const { good } = useContext(Context);
-
+    const COLOR_MAP = {
+        "В наявності": "green.300",
+        "Закінчується": "yellow.400",
+        "Закінчився": "red.500",
+        "Очікується": "teal.400"
+    }
     const goToGoodPage = () => {
         const name = cyrillicToTranslit.transform(param.name, '-').toLowerCase();
         good.setId(param.id);
@@ -35,6 +40,7 @@ const OneProduct = observer(({ param }) => {
                 <Image minHeight="220px" w="100%" objectFit="cover" src={param.image} alt="" />
             </div>
             <Text noOfLines={1} textOverflow="ellipsis" fontSize='20px' my="10px" maxHeight={24} overflow="hidden" alignSelf="start">{param.name}</Text>
+            <Text noOfLines={1} textOverflow="ellipsis" fontSize='20px' my="10px" maxHeight={24} overflow="hidden" alignSelf="start" color={COLOR_MAP[param.state]} >{param.state}</Text>
             <Flex justifyContent="space-between" w="80%">
                 <div className="Price"><p style={{ fontSize: "24px" }}>{param.price}₴</p></div>
                 <div className="Cart">

@@ -19,8 +19,9 @@ const Shop = () => {
     const btnRef = React.useRef()
 
     const getGoods = async () => {
-        console.log(typeID)
-        const response = await axios.get(`http://localhost:8000/good/getAll?typeID=${typeID}&state=${state}&discount=${discount}`);
+        let typeurl = [];
+        typeID.forEach((id) => typeurl.push(`typeID=${id}`));
+        const response = await axios.get(`https://mydiplomlevas.herokuapp.com/good/getall?${typeurl.join("&")}&state=${state}&discount=${discount}`);
         console.log(response.data);
         if (response.status === 200) setGoods(response.data);
     }
@@ -33,18 +34,18 @@ const Shop = () => {
 
     const check = (checked, filter) => {
         if (checked) {
-            setTypeID(...typeID, filter);
+            setTypeID([...typeID, filter]);
         }
         else {
-            typeID.splice(typeID.indexOf(filter))
+            setTypeID([...typeID.filter((id) => filter !== id)])
         }
-        console.log(typeID)
+
 
     }
 
     const toDefaults = () => {
         setState("");
-        setTypeID("");
+        setTypeID([]);
         setDiscount(false);
         getGoods();
 
@@ -92,7 +93,7 @@ const Shop = () => {
                         <Box>
                             {typesList.map((filter) =>
 
-                                <Checkbox key={filter.id} onClick={(e) => { check(e.target.checked, filter.id) }}>{filter.name}</Checkbox>
+                                <Checkbox key={filter.id} onChange={(e) => { check(e.target.checked, filter.id); }}>{filter.name}</Checkbox>
 
                             )}
                         </Box>

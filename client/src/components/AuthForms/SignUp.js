@@ -7,6 +7,8 @@ import { observer } from "mobx-react-lite";
 import { SIGN_IN } from "../../routes/const";
 import { Link } from "react-router-dom";
 import { Button, Input, Heading, FormControl } from "@chakra-ui/react";
+import jwtDecode from "jwt-decode";
+
 
 const SignUpForm = observer(() => {
     const { user } = useContext(Context);
@@ -19,7 +21,13 @@ const SignUpForm = observer(() => {
         const response = await axios.post('https://mydiplomlevas.herokuapp.com/user/registration', { name, email, password });
 
         if (response.status === 200) {
-            user.setUser(true)
+            var decode = jwtDecode(response.data.token)
+            user.setUser({
+                id: decode.id,
+                name: decode.name,
+                email: decode.email,
+                role: decode.role
+            })
             user.setIsAuth(true)
             localStorage.setItem("Token", "Bearer " + response.data.token);
             navigator('/');

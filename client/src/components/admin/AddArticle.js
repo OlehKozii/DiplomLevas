@@ -1,6 +1,7 @@
 import React from "react";
 import {
     useDisclosure,
+    Box,
     Button,
     Modal,
     ModalOverlay,
@@ -14,6 +15,7 @@ import {
     Textarea,
     ModalFooter
 } from "@chakra-ui/react";
+
 
 function AddArticle({ isOpen, onClose }) {
     return (

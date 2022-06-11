@@ -9,7 +9,8 @@ const goodsSchema = new Schema({
     comments: [{
         name: { type: String },
         text: { type: String },
-        time: { type: Date }
+        time: { type: Date },
+        grade: { type: Number }
     }],
     params: [{
         title: { type: String },

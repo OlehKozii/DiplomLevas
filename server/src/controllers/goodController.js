@@ -15,6 +15,9 @@ class deviceController {
             if (!file) {
                 next(err.badRequest("No image"))
             }
+            if (state === "") {
+                state = "В наявності"
+            }
             const result = await cloudinary.uploader.upload(file.path, { folder: "avatar" })
             const myDevice = new goods({
                 id: v4().toString(),
@@ -63,13 +66,12 @@ class deviceController {
 
     async addComment(req, res, next) {
         const id = req.params.id;
-        const { name, text } = req.body;
-        const time = Date.now()
+        const { name, text, time, grade } = req.body;
         const good = await goods.findOne({ id: id }).exec()
         if (!good) {
             return next(err.badRequest("No such device"))
         }
-        good.comments.unshift({ name, text, time })
+        good.comments.unshift({ name, text, time, grade })
         good.save()
         return res.send(good)
     }
@@ -77,13 +79,14 @@ class deviceController {
     async getAll(req, res) {
         const { state, typeID, discount } = req.query
         let filter
-        console.log(req.query)
         try {
             if (!typeID && !state && !discount) {
                 filter = await goods.find({}).exec()
             }
             if (typeID && state && discount) {
-                filter = await goods.find({ state: state /*,discount*/, typeID: typeID }).exec()
+                filter = await goods.find({ state: state,  /*,discount*/ })
+                    .where('typeID').in(typeID)
+                    .exec()
             }
             if (state && !typeID && !discount) {
                 filter = await goods.find({ state: state }).exec()
@@ -92,10 +95,10 @@ class deviceController {
                 filter = await goods.find({ state: state/*,discount*/ }).exec()
             }
             if (typeID && !state && discount) {
-                filter = await goods.find({ typeID: typeID/*,discount*/ }).exec()
+                filter = await goods.find({ typeID: { $in: typeID }/*,discount*/ }).exec()
             }
             if (typeID && !state && !discount) {
-                filter = await goods.find({ typeID: typeID }).exec()
+                filter = await goods.find({ typeID: { $in: typeID } }).exec()
             }
             if (!typeID && !state && discount) {
                 filter = await goods.find({ /*,discount*/ }).exec()
