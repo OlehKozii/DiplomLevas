@@ -8,7 +8,7 @@ import { GOOD_ROUTE } from "../../routes/const";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import { Context } from "../../index";
 import { observer } from "mobx-react-lite";
-
+import axios from "axios";
 
 const cyrillicToTranslit = new CyrillicToTranslit();
 
@@ -21,18 +21,24 @@ const OneProduct = observer(({ param }) => {
         good.setId(param.id);
         navigator(GOOD_ROUTE + `/${name}`)
     };
+    const addToCart = async (param) => {
+        const response = await axios.post('https://mydiplomlevas.herokuapp.com/basket/add', {});
 
+        if (response.status === 200) {
+
+        };
+    }
     return (
         <Box layerStyle="card" onClick={goToGoodPage}>
             <div>
                 <div className="state"></div>
                 <Image minHeight="220px" w="100%" objectFit="cover" src={param.image} alt="" />
             </div>
-            <Text noOfLines={1} isTruncated fontSize='20px' my="10px" maxHeight={24} overflow="hidden" alignSelf="start">{param.name}</Text>
+            <Text noOfLines={1} textOverflow="ellipsis" fontSize='20px' my="10px" maxHeight={24} overflow="hidden" alignSelf="start">{param.name}</Text>
             <Flex justifyContent="space-between" w="80%">
                 <div className="Price"><p style={{ fontSize: "24px" }}>{param.price}₴</p></div>
                 <div className="Cart">
-                    <Button colorScheme="teal" h="30px" onClick={() => console.log("Added to the cart")}><ShoppingCartIcon></ShoppingCartIcon></Button>
+                    <Button colorScheme="teal" h="30px" /*onClick={addToCart(param)}*/><ShoppingCartIcon></ShoppingCartIcon></Button>
                 </div>
             </Flex>
 

@@ -8,5 +8,6 @@ const checkRole = require("../middleware/authMiddleware")
 router.post('/create', upload.single("image"), goodController.create)
 router.get('/getall', goodController.getAll)
 router.get('/:id', goodController.getOne)
+router.post('/addComment/:id', goodController.addComment)
 
 module.exports = router

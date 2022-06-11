@@ -3,6 +3,7 @@ const { upload } = require("../service/multer")
 const { goods, params } = require("../models/goodsModel")
 const err = require("../errors/err")
 const { v4 } = require("uuid")
+const { badRequest } = require("../errors/err")
 
 class deviceController {
 
@@ -60,33 +61,53 @@ class deviceController {
         return res.send(good)
     }
 
+    async addComment(req, res, next) {
+        const id = req.params.id;
+        const { name, text } = req.body;
+        const time = Date.now()
+        const good = await goods.findOne({ id: id }).exec()
+        if (!good) {
+            return next(err.badRequest("No such device"))
+        }
+        good.comments.unshift({ name, text, time })
+        good.save()
+        return res.send(good)
+    }
+
     async getAll(req, res) {
-        const { state, typeID, discount } = req.body
+        const { state, typeID, discount } = req.query
         let filter
-        if (!typeID && !state && !discount) {
-            filter = await goods.find({}).exec()
-        }
-        if (typeID && state && discount) {
-            filter = await goods.find({ state: state, discount, typeID: typeID }).exec()
-        }
-        if (state && !typeID && !discount) {
-            filter = await goods.find({ state: state }).exec()
-        }
-        if (state && !typeID && discount) {
-            filter = await goods.find({ state: state, discount }).exec()
-        }
-        if (typeID && !state && discount) {
-            filter = await goods.find({ typeID: typeID, discount }).exec()
-        }
-        if (typeID && !state && !discount) {
-            filter = await goods.find({ typeID: typeID }).exec()
-        }
-        if (!typeID && !state && discount) {
-            filter = await goods.find({ discount }).exec()
+        console.log(req.query)
+        try {
+            if (!typeID && !state && !discount) {
+                filter = await goods.find({}).exec()
+            }
+            if (typeID && state && discount) {
+                filter = await goods.find({ state: state /*,discount*/, typeID: typeID }).exec()
+            }
+            if (state && !typeID && !discount) {
+                filter = await goods.find({ state: state }).exec()
+            }
+            if (state && !typeID && discount) {
+                filter = await goods.find({ state: state/*,discount*/ }).exec()
+            }
+            if (typeID && !state && discount) {
+                filter = await goods.find({ typeID: typeID/*,discount*/ }).exec()
+            }
+            if (typeID && !state && !discount) {
+                filter = await goods.find({ typeID: typeID }).exec()
+            }
+            if (!typeID && !state && discount) {
+                filter = await goods.find({ /*,discount*/ }).exec()
+            }
+            return res.send(filter)
+        } catch (e) {
+            console.log(e)
+            next(badRequest("Error"))
         }
 
-        return res.send(filter)
     }
+
 }
 
 module.exports = new deviceController()

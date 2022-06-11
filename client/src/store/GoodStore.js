@@ -1,4 +1,6 @@
 import { makeAutoObservable } from "mobx";
+import { makePersistable, getPersistedStore } from "mobx-persist-store";
+
 export default class GoodStore {
   constructor() {
     this._id = '';
@@ -6,6 +8,11 @@ export default class GoodStore {
     this._brands = [];
     this._goods = [];
     makeAutoObservable(this);
+    makePersistable(this, {
+      name: "GoodStore",
+      properties: ['_id'],
+      storage: window.localStorage
+    });
   }
 
   get id() {
@@ -34,5 +41,9 @@ export default class GoodStore {
   }
   setGoods(value) {
     this._goods = value;
+  }
+
+  async getStoredData() {
+    return getPersistedStore(this);
   }
 }

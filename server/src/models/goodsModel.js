@@ -6,6 +6,11 @@ const goodsSchema = new Schema({
     typeID: { type: String, required: true },
     price: { type: Number, required: true, min: 1 },
     discount: { type: Number, min: 0 },
+    comments: [{
+        name: { type: String },
+        text: { type: String },
+        time: { type: Date }
+    }],
     params: [{
         title: { type: String },
         description: { type: String }

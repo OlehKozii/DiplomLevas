@@ -4,21 +4,23 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../../index";
 import styles from "./shop.module.scss";
 import axios from 'axios';
-import { Grid, Container, GridItem, Select, SimpleGrid, DrawerHeader, DrawerBody, Input, Checkbox, DrawerFooter, Button, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton } from "@chakra-ui/react";
+import { Box, FormLabel, Grid, Container, GridItem, Select, SimpleGrid, DrawerHeader, DrawerBody, Input, Checkbox, DrawerFooter, Button, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton } from "@chakra-ui/react";
 
 const is = ["В наявності", "Закінчується", "Закінчився", "Очікується"]
 
 const Shop = () => {
     // const { good } = useContext(Context)
-    const [typeID, setTypeID] = useState("")
+    const [typeID, setTypeID] = useState([])
     const [state, setState] = useState("")
     const [discount, setDiscount] = useState(false)
     const [goodsList, setGoods] = useState([]);
     const [typesList, setTypes] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = React.useRef()
+
     const getGoods = async () => {
-        const response = await axios.get('https://mydiplomlevas.herokuapp.com/good/getAll', { typeID, state, discount });
+        console.log(typeID)
+        const response = await axios.get(`http://localhost:8000/good/getAll?typeID=${typeID}&state=${state}&discount=${discount}`);
         console.log(response.data);
         if (response.status === 200) setGoods(response.data);
     }
@@ -29,16 +31,31 @@ const Shop = () => {
         if (response.status === 200) setTypes(response.data);
     }
 
+    const check = (checked, filter) => {
+        if (checked) {
+            setTypeID(...typeID, filter);
+        }
+        else {
+            typeID.splice(typeID.indexOf(filter))
+        }
+        console.log(typeID)
+
+    }
+
+    const toDefaults = () => {
+        setState("");
+        setTypeID("");
+        setDiscount(false);
+        getGoods();
+
+    }
+
     useEffect(() => {
         getTypes();
         getGoods();
         console.log(goodsList);
     }, []);
-    useEffect(() => {
-        getTypes();
-        getGoods();
-        console.log(goodsList);
-    }, [typeID, state, discount]);
+
 
     return (
         <>
@@ -65,27 +82,37 @@ const Shop = () => {
                     <DrawerHeader>Create your account</DrawerHeader>
 
                     <DrawerBody>
-                        <Select marginBottom="5px" placeholder='Виберіть тип'>
+                        <Box>
+                            <Select color="black" placeholder='Наявність'>
+                                {is.map((isfilter) =>
+                                    <option key={isfilter} onClick={() => { setState(isfilter); }}>{isfilter}</option>
+                                )}
+                            </Select>
+                        </Box>
+                        <Box>
                             {typesList.map((filter) =>
-                                <option key={filter.id} onChange={() => setTypeID(filter.id)}>{filter.name}</option>
+
+                                <Checkbox key={filter.id} onClick={(e) => { check(e.target.checked, filter.id) }}>{filter.name}</Checkbox>
+
                             )}
-                        </Select>
-                        <Select color="black" placeholder='Наявність'>
-                            {is.map((isfilter) =>
-                                <option key={isfilter} onChange={(e) => setState(e.target.value)}>{isfilter}</option>
-                            )}
-                        </Select>
-                        <Checkbox onChange={() => setDiscount(!discount)}>Акційний товар</Checkbox>
+                        </Box>
+                        <Box>
+                            <FormLabel>Гарячі пропозиції</FormLabel>
+                            <Checkbox onClick={() => { setDiscount(!discount); }}>Акційний товар</Checkbox>
+                        </Box>
+                        <Button variant='outline' mr={3} marginTop="7px" onClick={() => { toDefaults(); }}>
+                            Скинути фільтри
+                        </Button>
                     </DrawerBody>
 
                     <DrawerFooter>
                         <Button variant='outline' mr={3} onClick={onClose}>
                             Скасувати
                         </Button>
-                        <Button colorScheme='blue' onClick={getGoods}>Підтвердити</Button>
+                        <Button colorScheme='blue' onClick={() => { getGoods(); }}>Підтвердити</Button>
                     </DrawerFooter>
                 </DrawerContent>
-            </Drawer>
+            </Drawer >
         </>
     )
 }
