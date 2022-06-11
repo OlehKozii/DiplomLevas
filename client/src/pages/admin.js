@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Center, Heading, Menu, MenuButton, MenuItem, MenuList, useDisclosure, Button, Flex, Text, Spacer } from '@chakra-ui/react'
+import { Container, Center, TableContainer, Table, Th, Td, Tr, Thead, Tbody, Tfoot, TableCaption, Heading, Menu, MenuButton, MenuItem, MenuList, useDisclosure, Button, Flex, Text, Spacer } from '@chakra-ui/react'
+import { ChevronDownIcon } from "@chakra-ui/icons"
 import NewProduct from '../components/admin/NewProduct'
 import EditProduct from '../components/admin/EditProduct'
 import AddProductType from '../components/admin/AddProductType'
@@ -11,10 +12,10 @@ import axios from 'axios'
 
 const Admin = () => {
     const MAP = {
-        'Продукти': '',
+        'Продукти': 'good/getall',
         'Користувачі': 'user/allUsers',
-        'Статті': '',
-        'Замовлення': '',
+        'Статті': 'user/articles',
+        'Замовлення': 'user/getAllOrders',
     }
 
     const [page, setPage] = useState('Продукти')
@@ -51,9 +52,9 @@ const Admin = () => {
     }, [page]);
 
     return (
-        <Container display="flex" flexDirection="column" alignItems="center" p="30px">
+        <Container display="flex" flexDirection="column" alignItems="center" p="30px" maxW="1000px">
             <Menu >
-                <MenuButton width='120px' as={Button} >
+                <MenuButton width='170px' mb="30px" as={Button} rightIcon={<ChevronDownIcon />}>
                     {page}
                 </MenuButton>
                 <Center>
@@ -74,18 +75,80 @@ const Admin = () => {
                     <Button onClick={onNewProductOpen}>Добавити новий продукт</Button>
                     <Button onClick={onEditProductOpen}>Редагувати продукт</Button>
                     <Button onClick={onAddProductTypeOpen} >Добавити новий тип продукту</Button>
+
+                    <TableContainer>
+                        <Table bg='gray.200' variant='striped' rounded={10}>
+                            <TableCaption>Список продуктів</TableCaption>
+                            <Thead>
+                                <Tr>
+                                    <Th>Зображення</Th>
+                                    <Th>Назва</Th>
+                                    <Th>Ціна</Th>
+                                    <Th>Змінити</Th>
+                                    <Th>Видалити</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {data.map(user => (
+                                    <Tr>
+                                        <Td>{user.id}</Td>
+                                        <Td>{user.name}</Td>
+                                        <Td>{user.email}</Td>
+                                    </Tr>
+                                ))}
+                            </Tbody>
+                            <Tfoot>
+                                <Tr>
+                                    <Th>Ідентифікатор</Th>
+                                    <Th>Ім'я</Th>
+                                    <Th>Email</Th>
+                                </Tr>
+                            </Tfoot>
+                        </Table>
+                    </TableContainer>
                 </>
             }
 
             {page === 'Користувачі' &&
                 <>
                     <Button onClick={onUsersOpen}>Список користувачів</Button>
+
+                    <TableContainer>
+                        <Table bg='gray.200' variant='striped' rounded={10}>
+                            <TableCaption>Список усіх користувачів</TableCaption>
+                            <Thead>
+                                <Tr>
+                                    <Th>Ідентифікатор</Th>
+                                    <Th>Ім'я</Th>
+                                    <Th>Email</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {data.map(user => (
+                                    <Tr>
+                                        <Td>{user.id}</Td>
+                                        <Td>{user.name}</Td>
+                                        <Td>{user.email}</Td>
+                                    </Tr>
+                                ))}
+                            </Tbody>
+                            <Tfoot>
+                                <Tr>
+                                    <Th>Ідентифікатор</Th>
+                                    <Th>Ім'я</Th>
+                                    <Th>Email</Th>
+                                </Tr>
+                            </Tfoot>
+                        </Table>
+                    </TableContainer>
                 </>
             }
 
             {page === 'Замовлення' &&
                 <>
                     <Button onClick={onOrdersOpen}>Переглянути замовлення</Button>
+
+
                 </>
             }
 

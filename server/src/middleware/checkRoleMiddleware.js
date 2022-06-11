@@ -4,6 +4,9 @@ const user = require("../models/userModel")
 
 module.exports = async function checkRole(req, res, next) {
     try {
+        if (req.method === "OPTIONS") {
+            next()
+        }
         if (req.role !== "admin") {
             return next(err.forbidden("Dont have access"));
         }

@@ -15,6 +15,8 @@ export const Theme = extendTheme({
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "space-around",
+            maxWidth: "360px",
+            minHeight: "400px",
             padding: '15px',
             transition: 'all 0.2s',
             borderRadius: '10px',

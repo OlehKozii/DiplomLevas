@@ -19,11 +19,7 @@
   }
   }
 
-  #img {
-    height: 190px;
-    width: 180px;
-    object-fit: cover;
-  }
+
   #name{
     max-height: 16px;
     width: 200px;
@@ -33,7 +29,7 @@
   #price{
     display: flex;
     justify-content: space-between;
-    font-size: 27px;
+    font-size: 32px;
     width: 150px;
     button{
       border:none;

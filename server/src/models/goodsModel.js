@@ -7,10 +7,11 @@ const goodsSchema = new Schema({
     price: { type: Number, required: true, min: 1 },
     discount: { type: Number, min: 0 },
     params: [{
-        title: { type: String, required: true },
-        description: { type: String, required: true }
+        title: { type: String },
+        description: { type: String }
     }],
-    image: { type: String, required: true }
+    image: { type: String, required: true },
+    state: { type: String, enum: ["В наявності", "Закінчується", "Закінчився", "Очікується"], default: "Очікується" }
 })
 
 

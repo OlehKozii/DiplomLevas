@@ -8,34 +8,42 @@ class deviceController {
 
     async create(req, res, next) {
         try {
-            const { name, price, brandID, typeID, info } = req.body
+            const { name, price, state, typeID } = req.body;
             const file = req.file
+
             if (!file) {
-                return next(err.badRequest("No image"))
+                next(err.badRequest("No image"))
             }
             const result = await cloudinary.uploader.upload(file.path, { folder: "avatar" })
             const myDevice = new goods({
                 id: v4().toString(),
                 name: name,
-                brandID: brandID,
+                state: state,
                 typeID: typeID,
                 price: price,
                 image: result.url
             })
-            if (info) {
+            console.log(myDevice)
+            if (req.body.info) {
+                const info = JSON.parse(req.body.info)
                 for (let i of info) {
-                    myDevice.params.push({
-                        title: i.title,
-                        description: i.description
-                    })
+                    if ((i.title && i.description) || (i.title === "" || i.description === ""))
+                        myDevice.params.push({
+                            title: i.title,
+                            description: i.description
+                        })
+                    else {
+                        next(err.badRequest("Ivalid"))
+                    }
 
                 }
             }
             myDevice.save()
 
-            return res.json(myDevice)
+            res.send(myDevice)
         } catch (e) {
-            return next(err.badRequest(e.message))
+            console.log(e)
+            next(err.badRequest(e.message))
         }
 
 
@@ -44,30 +52,40 @@ class deviceController {
     }
 
     async getOne(req, res, next) {
-        const { id } = req.query
-        const good = await goods.find({ id: id }).exec()
+        const id = req.params.id
+        const good = await goods.findOne({ id: id }).exec()
         if (!good) {
             return next(err.badRequest("No such device"))
         }
-        return res.json(good)
+        return res.send(good)
     }
 
     async getAll(req, res) {
-        const { brandID, typeID } = req.body
+        const { state, typeID, discount } = req.body
         let filter
-        if (!brandID && !typeID) {
+        if (!typeID && !state && !discount) {
             filter = await goods.find({}).exec()
         }
-        if (brandID && !typeID) {
-            filter = await goods.find({ brandID: brandID }).exec()
+        if (typeID && state && discount) {
+            filter = await goods.find({ state: state, discount, typeID: typeID }).exec()
         }
-        if (!brandID && typeID) {
+        if (state && !typeID && !discount) {
+            filter = await goods.find({ state: state }).exec()
+        }
+        if (state && !typeID && discount) {
+            filter = await goods.find({ state: state, discount }).exec()
+        }
+        if (typeID && !state && discount) {
+            filter = await goods.find({ typeID: typeID, discount }).exec()
+        }
+        if (typeID && !state && !discount) {
             filter = await goods.find({ typeID: typeID }).exec()
         }
-        if (brandID && typeID) {
-            filter = await goods.find({ typeID: typeID, brandID: brandID }).exec()
+        if (!typeID && !state && discount) {
+            filter = await goods.find({ discount }).exec()
         }
-        return res.json(filter)
+
+        return res.send(filter)
     }
 }
 

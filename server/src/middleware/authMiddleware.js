@@ -4,6 +4,9 @@ const user = require("../models/userModel")
 
 module.exports = async function checkAuth(req, res, next) {
     try {
+        if (req.method === "OPTIONS") {
+            next()
+        }
         const token = req.header('Authorization')?.replace('Bearer ', '')?.trim();
         if (!token) {
             return next(err.forbidden("Unauthorized1"));
