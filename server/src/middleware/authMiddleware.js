@@ -11,7 +11,6 @@ module.exports = async function checkAuth(req, res, next) {
         if (!token) {
             return next(err.forbidden("Unauthorized1"));
         }
-        console.log("TOKEN!!!: ", token);
         const decoded = jwt.verify(token, process.env.secret)
         console.log(decoded.name);
         const candidate = await user.findOne({ "id": decoded.id, "name": decoded.name, "email": decoded.email, "role": decoded.role }).exec()
@@ -19,6 +18,7 @@ module.exports = async function checkAuth(req, res, next) {
             return next(err.forbidden("Unauthorized2"));
         }
         req.role = candidate.role;
+        req.user = candidate;
         next();
     } catch (e) {
         console.log(e);

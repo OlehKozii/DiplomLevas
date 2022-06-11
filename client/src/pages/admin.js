@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Center, TableContainer, Table, Th, Td, Tr, Thead, Tbody, Tfoot, TableCaption, Heading, Menu, MenuButton, MenuItem, MenuList, useDisclosure, Button, Flex, Text, Spacer } from '@chakra-ui/react'
+import { Container, Center, TableContainer, Table, Th, Image, Td, Tr, Thead, Tbody, Tfoot, TableCaption, Heading, Menu, MenuButton, MenuItem, MenuList, useDisclosure, Button, Flex, Text, Spacer } from '@chakra-ui/react'
 import { ChevronDownIcon } from "@chakra-ui/icons"
 import NewProduct from '../components/admin/NewProduct'
 import EditProduct from '../components/admin/EditProduct'
@@ -8,6 +8,7 @@ import Users from '../components/admin/Users'
 import Orders from '../components/admin/Orders'
 import AddArticle from '../components/admin/AddArticle'
 import EditArticle from '../components/admin/EditArticle'
+import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import axios from 'axios'
 
 const Admin = () => {
@@ -19,13 +20,7 @@ const Admin = () => {
     }
 
     const [page, setPage] = useState('Продукти')
-
     const [data, setData] = useState([])
-    // const [products, setProducts] = useState([]);
-    // const [types, setTypes] = useState([]);
-    // const [users, setUsers] = useState([]);
-    // const [articles, setArticles] = useState([]);
-    // const [orders, setOrders] = useState([]);
 
     const { isOpen: isNewProductOpen, onOpen: onNewProductOpen, onClose: onNewProductClose } = useDisclosure()
     const { isOpen: isEditProductOpen, onOpen: onEditProductOpen, onClose: onEditProductClose } = useDisclosure()
@@ -73,8 +68,7 @@ const Admin = () => {
             {page === 'Продукти' &&
                 <>
                     <Button onClick={onNewProductOpen}>Добавити новий продукт</Button>
-                    <Button onClick={onEditProductOpen}>Редагувати продукт</Button>
-                    <Button onClick={onAddProductTypeOpen} >Добавити новий тип продукту</Button>
+                    <Button onClick={onAddProductTypeOpen} marginBottom="20px" >Добавити новий тип продукту</Button>
 
                     <TableContainer>
                         <Table bg='gray.200' variant='striped' rounded={10}>
@@ -89,19 +83,23 @@ const Admin = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {data.map(user => (
+                                {data.map(product => (
                                     <Tr>
-                                        <Td>{user.id}</Td>
-                                        <Td>{user.name}</Td>
-                                        <Td>{user.email}</Td>
+                                        <Td><Image h="50px" src={product.image} rounded={5} /></Td>
+                                        <Td>{product.name}</Td>
+                                        <Td textAlign="center">{product.price}₴</Td>
+                                        <Td textAlign="center"><Button colorScheme="teal"><EditIcon /></Button></Td>
+                                        <Td textAlign="center"><Button colorScheme="red"><DeleteIcon /></Button></Td>
                                     </Tr>
                                 ))}
                             </Tbody>
                             <Tfoot>
                                 <Tr>
-                                    <Th>Ідентифікатор</Th>
-                                    <Th>Ім'я</Th>
-                                    <Th>Email</Th>
+                                    <Th>Зображення</Th>
+                                    <Th>Назва</Th>
+                                    <Th>Ціна</Th>
+                                    <Th>Змінити</Th>
+                                    <Th>Видалити</Th>
                                 </Tr>
                             </Tfoot>
                         </Table>
@@ -109,9 +107,10 @@ const Admin = () => {
                 </>
             }
 
-            {page === 'Користувачі' &&
+            {
+                page === 'Користувачі' &&
                 <>
-                    <Button onClick={onUsersOpen}>Список користувачів</Button>
+                    <Button onClick={onUsersOpen} marginBottom="20px">Список користувачів</Button>
 
                     <TableContainer>
                         <Table bg='gray.200' variant='striped' rounded={10}>
@@ -144,22 +143,51 @@ const Admin = () => {
                 </>
             }
 
-            {page === 'Замовлення' &&
+            {
+                page === 'Замовлення' &&
                 <>
-                    <Button onClick={onOrdersOpen}>Переглянути замовлення</Button>
+                    <Button onClick={onOrdersOpen} marginBottom="20px">Переглянути замовлення</Button>
 
-
+                    <TableContainer>
+                        <Table bg='gray.200' variant='striped' rounded={10}>
+                            <TableCaption>Список усіх користувачів</TableCaption>
+                            <Thead>
+                                <Tr>
+                                    <Th>Ідентифікатор</Th>
+                                    <Th>Ціна</Th>
+                                    <Th>Дата та час</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {data.map(order => (
+                                    <Tr>
+                                        <Td>{order.id}</Td>
+                                        <Td>{order.price}₴</Td>
+                                        <Td>{order.time}</Td>
+                                    </Tr>
+                                ))}
+                            </Tbody>
+                            <Tfoot>
+                                <Tr>
+                                    <Th>Ідентифікатор</Th>
+                                    <Th>Ціна</Th>
+                                    <Th>Дата та час</Th>
+                                </Tr>
+                            </Tfoot>
+                        </Table>
+                    </TableContainer>
                 </>
             }
 
-            {page === 'Статті' &&
+            {
+                page === 'Статті' &&
                 <>
                     <Button onClick={onAddArticleOpen}>Добавити статтю</Button>
                     <Button onClick={onEditArticleOpen}>Редагувати статтю</Button>
+
+
                 </>
             }
-
-            {console.log(data)}
 
             <NewProduct
                 isOpen={isNewProductOpen}

@@ -61,11 +61,17 @@ function ImageCropper(props) {
                         return;
                     }
 
-                    blob.name = fileName;
-                    // creating a Object URL representing the Blob object given
-                    const croppedImageUrl = window.URL.createObjectURL(blob);
+                    const file = new File(
+                        [blob],
+                        'filename.png',
+                        {
+                            type: blob.type,
+                            lastModified: new Date().getTime()
+                        }
+                    )
+                    const croppedImage = file;
 
-                    resolve(croppedImageUrl);
+                    resolve(croppedImage);
                 }, 'image/jpeg'
             );
         });

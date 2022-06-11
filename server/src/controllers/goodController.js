@@ -9,20 +9,20 @@ class deviceController {
 
     async create(req, res, next) {
         try {
-            const { name, price, state, typeID } = req.body;
+            const { name, price, typeID } = req.body;
             const file = req.file
-
+            console.log(req.body.state)
             if (!file) {
-                next(err.badRequest("No image"))
+                return next(err.badRequest("No image"))
             }
-            if (state === "") {
-                state = "В наявності"
+            if (req.body.state === "") {
+                req.body.state = "В наявності"
             }
             const result = await cloudinary.uploader.upload(file.path, { folder: "avatar" })
             const myDevice = new goods({
                 id: v4().toString(),
                 name: name,
-                state: state,
+                state: req.body.state,
                 typeID: typeID,
                 price: price,
                 image: result.url

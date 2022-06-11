@@ -81,8 +81,7 @@ const Good = observer(() => {
 
     return (
         <Container p={30} maxWidth={1080}>
-            <Box bg="whiteAlpha.500" rounded={10} p='10px 20px'>
-
+            <Box bg="whiteAlpha.500" rounded={10} p='10px 30px 40px 30px'>
                 <Text marginBottom="10px" fontSize='4xl'>{data?.name}</Text>
                 <SimpleGrid minChildWidth='350px' spacing="25px">
                     <Box>

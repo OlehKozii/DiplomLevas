@@ -19,25 +19,7 @@ import {
 import axios from "axios";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
-// import 'react-image-crop/dist/ReactCrop.css'
 import ImageCropper from '../cropImage';
-// function Dropzone() {
-//     const onDrop = useCallback(acceptedFiles => {
-//         // Do something with the files
-//     }, [])
-//     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
-
-//     return (
-//         <Box w="170px" h='170px' borderColor="gray.500" borderWidth='2px' rounded={10} {...getRootProps()}>
-//             <input {...getInputProps()} />
-//             {
-//                 isDragActive ?
-//                     <p>Drag</p> :
-//                     <p>Drop</p>
-//             }
-//         </Box>
-//     )
-// }
 
 const NewProduct = observer(({ isOpen, onClose }) => {
     const navigator = useNavigate();
@@ -47,22 +29,23 @@ const NewProduct = observer(({ isOpen, onClose }) => {
     const [typeID, setTypeID] = useState("1")
     const [types, setTypes] = useState([])
     const [image, setImage] = useState(null)
+    const [imageUrl, setImageUrl] = useState(null)
     const [state, setState] = useState("")
     const is = ["В наявності", "Закінчується", "Закінчився", "Очікується"]
 
     const [croppedImage, setCroppedImage] = useState(undefined);
 
     const selectFile = event => {
-        // if (event.target.files && event.target.files.length > 0) {
-        //     const reader = new FileReader();
+        if (event.target.files && event.target.files.length > 0) {
+            const reader = new FileReader();
 
-        //     reader.addEventListener('load', () =>
-        //         setImage(reader.result)
-        //     );
+            reader.addEventListener('load', () =>
+                setImageUrl(reader.result)
+            );
 
-        //     reader.readAsDataURL(event.target.files[0]);
-        // }
-        setImage(event.target.files[0]);
+            reader.readAsDataURL(event.target.files[0]);
+            setImage(event.target.files[0]);
+        }
     }
 
     const addInfo = () => {
@@ -80,7 +63,7 @@ const NewProduct = observer(({ isOpen, onClose }) => {
         const formData = new FormData()
         formData.append('name', name)
         formData.append('price', price)
-        formData.append("image", image)
+        formData.append("image", croppedImage)
         formData.append('typeID', typeID)
         formData.append('state', state)
         formData.append('info', JSON.stringify(info))
@@ -117,22 +100,11 @@ const NewProduct = observer(({ isOpen, onClose }) => {
                     <ModalCloseButton />
                     <ModalBody pb={6}>
                         <FormControl>
-                            {/* <Dropzone /> */}
                             <FormLabel>Фото</FormLabel>
                             <input accept="image/*" type="file" name="avatar" id="reg-avatar" onChange={selectFile} />
                         </FormControl>
                         {image &&
-                            <ImageCropper imageToCrop={image} onImageCropped={(croppedImage) => setCroppedImage(croppedImage)} />
-                        }
-                        {
-                            croppedImage &&
-                            <div>
-                                <h2>Cropped Image</h2>
-                                <img
-                                    alt="Cropped Image"
-                                    src={croppedImage}
-                                />
-                            </div>
+                            <ImageCropper imageToCrop={imageUrl} onImageCropped={(croppedImage) => setCroppedImage(croppedImage)} />
                         }
                         <FormControl>
                             <FormLabel></FormLabel>

@@ -35,10 +35,7 @@ const OneProduct = observer(({ param }) => {
     }
     return (
         <Box layerStyle="card" onClick={goToGoodPage}>
-            <div>
-                <div className="state"></div>
-                <Image minHeight="220px" w="100%" objectFit="cover" src={param.image} alt="" />
-            </div>
+            <Image w="100%" objectFit="cover" src={param.image} alt="" />
             <Text noOfLines={1} textOverflow="ellipsis" fontSize='20px' my="10px" maxHeight={24} overflow="hidden" alignSelf="start">{param.name}</Text>
             <Text noOfLines={1} textOverflow="ellipsis" fontSize='20px' my="10px" maxHeight={24} overflow="hidden" alignSelf="start" color={COLOR_MAP[param.state]} >{param.state}</Text>
             <Flex justifyContent="space-between" w="80%">
