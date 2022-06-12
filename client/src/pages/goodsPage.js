@@ -33,6 +33,7 @@ import {
 
 const Good = observer(() => {
     const { good, user } = useContext(Context);
+    console.log("User: ", user);
     const [data, setData] = useState({});
     const [commentText, setCommentText] = useState('');
     const [sliderValue, setSliderValue] = useState(50)
@@ -69,7 +70,7 @@ const Good = observer(() => {
     }
 
     async function addComment() {
-        const newComment = { name: 'username', text: commentText, time: new Date(), grade: sliderValue }
+        const newComment = { name: user.user.name, text: commentText, time: new Date(), grade: sliderValue }
         setData({ ...data, comments: [newComment, ...data.comments] });
         const response = await axios.post(`https://mydiplomlevas.herokuapp.com/good/addComment/${good.id}`, newComment);
         setCommentText('');

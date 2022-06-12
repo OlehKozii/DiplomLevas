@@ -3,8 +3,8 @@ import { Context } from "../../index";
 import styles from "./NavBar.module.scss";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import FilterFramesIcon from '@mui/icons-material/FilterFrames';
+// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+// import FilterFramesIcon from '@mui/icons-material/FilterFrames';
 import { Link } from "react-router-dom";
 import { SHOP_ROUTE, BASKET_ROUTE, MAIN_ROUTE, NEWS_ROUTE, SIGN_IN } from "../../routes/const";
 import { SimpleGrid, Button, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerCloseButton, DrawerBody, Text, Box, useMediaQuery } from "@chakra-ui/react";
@@ -38,8 +38,14 @@ const NavBar = observer(() => {
           <Box display="flex" justifyContent='end' alignItems='center' px="20px">
             {user._isAuth ?
               <div>
-                <Link to={BASKET_ROUTE}><ShoppingCartIcon></ShoppingCartIcon></Link>
-                <Link to="/"><FilterFramesIcon></FilterFramesIcon></Link>
+                <Link to={BASKET_ROUTE}>
+                  {/* <ShoppingCartIcon></ShoppingCartIcon> */}
+                  Кошик
+                </Link>
+                <Link to="/">
+                  ...
+                  {/* <FilterFramesIcon></FilterFramesIcon> */}
+                </Link>
                 <Link to="/" onClick={() => logOut()}>Вийти</Link>
               </div>
               :
