@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import SignUpForm from "../../components/AuthForms/SignUp";
 import { observer } from "mobx-react-lite";
 import styles from "./Auth.module.scss";

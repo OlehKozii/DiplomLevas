@@ -21,8 +21,12 @@ const Basket = () => {
         }
     }
 
-    async function deleteGood(id) {
-        await axios.delete(`basket/${id}`);
+    async function deleteGood({ id, itemPrice }) {
+        const response = await axios.delete(`basket/${id}`);
+        if (response.status === 200) {
+            setBasket(basket.filter(item => item.id !== id));
+            setTotalPrice(totalPrice - itemPrice)
+        }
     }
 
     useEffect(() => {
@@ -43,7 +47,7 @@ const Basket = () => {
                                     </Flex>
                                     <Flex>X{item.count}</Flex>
                                     <Flex flexDir="column" justifyContent="space-between" alignItems="flex-end">
-                                        <Button w="40px" h="40px" colorScheme="red" onClick={() => deleteGood(item.id)}>
+                                        <Button w="40px" h="40px" colorScheme="red" onClick={() => deleteGood({id: item.id, itemPrice: item.price * item.count})}>
                                             <DeleteIcon>
                                                 
                                             </DeleteIcon>

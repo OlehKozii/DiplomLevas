@@ -1,8 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import OneProduct from "../../components/goodsList/oneProduct";
-import { observer } from "mobx-react-lite";
-import { Context } from "../../index";
-import styles from "./shop.module.scss";
 import axios from 'axios';
 import { Box, FormLabel, Grid, Container, GridItem, Select, SimpleGrid, DrawerHeader, DrawerBody, Input, Checkbox, DrawerFooter, Button, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton } from "@chakra-ui/react";
 

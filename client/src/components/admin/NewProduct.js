@@ -1,9 +1,6 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useDropzone } from 'react-dropzone';
+import React, { useEffect, useState} from "react";
 import {
-    useDisclosure,
     Button,
-    Box,
     Modal,
     ModalOverlay,
     ModalContent,
@@ -16,7 +13,7 @@ import {
     ModalFooter,
     Select
 } from "@chakra-ui/react";
-import axios from "axios";
+import axios from '../../utils/axios';
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import ImageCropper from '../cropImage';

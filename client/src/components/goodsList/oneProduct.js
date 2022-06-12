@@ -8,7 +8,7 @@ import { GOOD_ROUTE } from "../../routes/const";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import { Context } from "../../index";
 import { observer } from "mobx-react-lite";
-import axios from "axios";
+import axios from '../../utils/axios';
 
 const cyrillicToTranslit = new CyrillicToTranslit();
 

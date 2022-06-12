@@ -1,4 +1,4 @@
-import { Container, Heading, Button, Flex, Text, Spacer } from '@chakra-ui/react'
+import { Container, Heading, Flex, Text, Spacer } from '@chakra-ui/react'
 import React from 'react'
 
 const article = { "name": "Чому потрібно їсти овочі" }

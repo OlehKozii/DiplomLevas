@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-import styles from "./Forms.module.scss";
 import { Context } from "../../index";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from '../../utils/axios';
 import { observer } from "mobx-react-lite";
 import { SIGN_UP } from "../../routes/const";
 import { Link } from "react-router-dom";

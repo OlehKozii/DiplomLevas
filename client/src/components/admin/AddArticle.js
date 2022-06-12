@@ -1,7 +1,5 @@
 import React from "react";
 import {
-    useDisclosure,
-    Box,
     Button,
     Modal,
     ModalOverlay,
