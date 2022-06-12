@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import OneProduct from "../../components/goodsList/oneProduct";
-import axios from 'axios';
-import { Box, FormLabel, Grid, Container, GridItem, Select, SimpleGrid, DrawerHeader, DrawerBody, Input, Checkbox, DrawerFooter, Button, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton } from "@chakra-ui/react";
+import OneProduct from "../components/goodsList/oneProduct";
+import axios from '../utils/axios';
+import { Box, FormLabel, Container, Select, SimpleGrid, DrawerHeader, DrawerBody, Input, Checkbox, DrawerFooter, Button, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton } from "@chakra-ui/react";
 
 const is = ["В наявності", "Закінчується", "Закінчився", "Очікується"]
 
@@ -18,13 +18,13 @@ const Shop = () => {
     const getGoods = async () => {
         let typeurl = [];
         typeID.forEach((id) => typeurl.push(`typeID=${id}`));
-        const response = await axios.get(`https://mydiplomlevas.herokuapp.com/good/getall?${typeurl.join("&")}&state=${state}&discount=${discount}`);
+        const response = await axios.get(`good/getall?${typeurl.join("&")}&state=${state}&discount=${discount}`);
         console.log(response.data);
         if (response.status === 200) setGoods(response.data);
     }
 
     const getTypes = async () => {
-        const response = await axios.get('https://mydiplomlevas.herokuapp.com/type/getAll');
+        const response = await axios.get('type/getAll');
         console.log(response.data);
         if (response.status === 200) setTypes(response.data);
     }

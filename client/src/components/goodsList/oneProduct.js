@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import styles from "./oneProduct.module.scss";
 // import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Link } from "react-router-dom";
 import { Box, Flex, Image, Button, Text } from "@chakra-ui/react";

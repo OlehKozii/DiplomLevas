@@ -14,7 +14,6 @@ const App = observer(() => {
   const [loading, setLoading] = useState(true)
 
   const check = async () => {
-    // const { data } = await axios.get('https://mydiplomlevas.herokuapp.com/user/auth')
     const token = localStorage.getItem('Token')
     if (token) return jwt_decode(token);
     return undefined

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../../index";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from '../../utils/axios';
 import { observer } from "mobx-react-lite";
 import { SIGN_IN } from "../../routes/const";
 import { Link } from "react-router-dom";

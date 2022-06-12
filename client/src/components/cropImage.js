@@ -6,7 +6,6 @@ function ImageCropper(props) {
     const { imageToCrop, onImageCropped } = props;
 
     const [cropConfig, setCropConfig] = useState(
-        // default crop config
         {
             unit: '%',
             width: 30,

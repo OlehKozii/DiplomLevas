@@ -72,7 +72,7 @@ const Good = observer(() => {
     async function addComment() {
         const newComment = { name: user.user.name, text: commentText, time: new Date(), grade: sliderValue }
         setData({ ...data, comments: [newComment, ...data.comments] });
-        const response = await axios.post(`https://mydiplomlevas.herokuapp.com/good/addComment/${good.id}`, newComment);
+        const response = await axios.post(`good/addComment/${good.id}`, newComment);
         setCommentText('');
     }
 
