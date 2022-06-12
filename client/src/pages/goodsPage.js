@@ -62,7 +62,7 @@ const Good = observer(() => {
     }
 
     async function getData() {
-        const response = await axios.get(`https://mydiplomlevas.herokuapp.com/good/getone/${good.id}`);
+        const response = await axios.get(`good/getone/${good.id}`);
         if (response.status === 200) {
             setData(response.data);
             console.log(response.data);

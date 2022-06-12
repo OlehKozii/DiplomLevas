@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Container, VStack, Box, Flex, Text, Image, Button } from '@chakra-ui/react'
-import axios from 'axios';
+import { Container, VStack, Flex, Text, Image, Button } from '@chakra-ui/react'
+import { DeleteIcon } from "@chakra-ui/icons";
+import axios from '../utils/axios';
 
 const Basket = () => {
     const [basket, setBasket] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
 
     async function getBasket() {
-        const response = await axios.get('http://localhost:8000/basket/get', {
+        const response = await axios.get('basket/get', {
             headers: {
                 'Authorization': localStorage.getItem('Token')
             }
@@ -18,6 +19,10 @@ const Basket = () => {
             const total = response.data.reduce((total, item) => total + item.price * item.count, 0);
             setTotalPrice(total);
         }
+    }
+
+    async function deleteGood(id) {
+        await axios.delete(`basket/${id}`);
     }
 
     useEffect(() => {
@@ -38,7 +43,11 @@ const Basket = () => {
                                     </Flex>
                                     <Flex>X{item.count}</Flex>
                                     <Flex flexDir="column" justifyContent="space-between" alignItems="flex-end">
-                                        <Button w="40px" h="40px" colorScheme="red">*</Button>
+                                        <Button w="40px" h="40px" colorScheme="red" onClick={() => deleteGood(item.id)}>
+                                            <DeleteIcon>
+                                                
+                                            </DeleteIcon>
+                                        </Button>
                                         <Text mx={4} fontSize="30px" m="0" color="gray.600">{item.price}₴</Text>
                                     </Flex>
                                 </Flex>
@@ -55,4 +64,4 @@ const Basket = () => {
     )
 }
 
-export default Basket;
+export default Basket; 

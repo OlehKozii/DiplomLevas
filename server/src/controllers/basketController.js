@@ -3,8 +3,6 @@ const user = require("../models/userModel")
 const { goods } = require("../models/goodsModel")
 const err = require("../errors/err")
 
-
-
 class basketController {
 
     async add(req, res, next) {
@@ -58,7 +56,7 @@ class basketController {
     }
 
     async remove(req, res, next) {
-        const { goodId } = req.body;
+        const goodId = req.params.id;
         const { id } = req.user;
 
         if (!goodId) {

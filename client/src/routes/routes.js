@@ -13,7 +13,6 @@ import {
 } from "./const";
 
 const Admin = React.lazy(() => import("../pages/admin"));
-const Auth = React.lazy(() => import("../pages/auth"));
 const Basket = React.lazy(() => import("../pages/basket"));
 const Good = React.lazy(() => import("../pages/goodsPage"));
 const Shop = React.lazy(() => import("../pages/shop/shop"));
@@ -51,14 +50,6 @@ export const publicRoutes = [
   {
     path: NEWS_ROUTE,
     element: <News />,
-  },
-  {
-    path: LOGIN_ROUTE,
-    element: <Auth />,
-  },
-  {
-    path: REGISTRATION_ROUTE,
-    element: <Auth />,
   },
   {
     path: SHOP_ROUTE,

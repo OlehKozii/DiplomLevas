@@ -23,7 +23,7 @@ const SignInForm = observer(() => {
     }, []);
 
     const submit = async () => {
-        const response = await axios.post('https://mydiplomlevas.herokuapp.com/user/login', { email, password });
+        const response = await axios.post('user/login', { email, password });
         if (response.status === 200) {
             user.setUser(true)
             user.setIsAuth(true)

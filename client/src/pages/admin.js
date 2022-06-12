@@ -9,7 +9,7 @@ import Orders from '../components/admin/Orders'
 import AddArticle from '../components/admin/AddArticle'
 import EditArticle from '../components/admin/EditArticle'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
-import axios from 'axios'
+import axios from '../utils/axios'
 
 const Admin = () => {
     const MAP = {
@@ -31,7 +31,7 @@ const Admin = () => {
     const { isOpen: isEditArticleOpen, onOpen: onEditArticleOpen, onClose: onEditArticleClose } = useDisclosure()
 
     async function getData(route) {
-        const response = await axios.get('https://mydiplomlevas.herokuapp.com/' + route, {
+        const response = await axios.get(route, {
             headers: {
                 'Authorization': localStorage.getItem('Token')
             }

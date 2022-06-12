@@ -30,7 +30,7 @@ const OneProduct = observer(({ param }) => {
 
     const addToCart = async (e) => {
         e.stopPropagation();
-        const response = await axios.post('http://localhost:8000/basket/add', { goodId: param.id }, {
+        const response = await axios.post('basket/add', { goodId: param.id }, {
             headers: {
                 'Authorization': localStorage.getItem("Token")
             }

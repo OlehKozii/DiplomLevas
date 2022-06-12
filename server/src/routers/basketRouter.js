@@ -4,7 +4,7 @@ const checkAuth = require('../middleware/authMiddleware');
 const basketController = require('../controllers/basketController')
 
 router.post('/add', checkAuth, basketController.add)
-router.post('/remove', checkAuth, basketController.remove)
+router.delete('/:id', checkAuth, basketController.remove)
 router.post('/removeall', checkAuth, basketController.removeall)
 router.get('/get', checkAuth, basketController.get)
 

@@ -18,7 +18,7 @@ const SignUpForm = observer(() => {
     const [password, setPassword] = useState('');
 
     const submit = async () => {
-        const response = await axios.post('https://mydiplomlevas.herokuapp.com/user/registration', { name, email, password });
+        const response = await axios.post('user/registration', { name, email, password });
 
         if (response.status === 200) {
             var decode = jwtDecode(response.data.token)

@@ -67,7 +67,7 @@ const NewProduct = observer(({ isOpen, onClose }) => {
         formData.append('typeID', typeID)
         formData.append('state', state)
         formData.append('info', JSON.stringify(info))
-        const response = await axios.post('https://mydiplomlevas.herokuapp.com/good/create', formData, {
+        const response = await axios.post('good/create', formData, {
             headers: {
                 'content-type': 'multipart/form-data',
                 'Authorization': localStorage.getItem('Token')
@@ -80,7 +80,7 @@ const NewProduct = observer(({ isOpen, onClose }) => {
     }
 
     const getTypes = async () => {
-        const response = await axios.get('https://mydiplomlevas.herokuapp.com/type/getAll');
+        const response = await axios.get('type/getAll');
         if (response.status === 200) setTypes(response.data);
     }
 
