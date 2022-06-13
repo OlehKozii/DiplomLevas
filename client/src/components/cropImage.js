@@ -21,17 +21,13 @@ function ImageCropper(props) {
             const croppedImage = await getCroppedImage(
                 imageRef.target,
                 crop,
-                'croppedImage.jpeg' // destination filename
+                'croppedImage.jpeg'
             );
-
-            // calling the props function to expose
-            // croppedImage to the parent component
             onImageCropped(croppedImage);
         }
     }
 
-    function getCroppedImage(sourceImage, cropConfig, fileName) {
-        // creating the cropped image from the source image
+    function getCroppedImage(sourceImage, cropConfig) {
         const canvas = document.createElement('canvas');
         const scaleX = sourceImage.naturalWidth / sourceImage.width;
         const scaleY = sourceImage.naturalHeight / sourceImage.height;
@@ -54,7 +50,6 @@ function ImageCropper(props) {
         return new Promise((resolve, reject) => {
             canvas.toBlob(
                 (blob) => {
-                    // returning an error
                     if (!blob) {
                         reject(new Error('Canvas is empty'));
                         return;
@@ -80,7 +75,6 @@ function ImageCropper(props) {
         <ReactCrop
             crop={cropConfig}
             ruleOfThirds
-            crossorigin="anonymous" // to avoid CORS-related problems
             onChange={(cropConfig) => setCropConfig(cropConfig)}
             onComplete={(cropConfig) => cropImage(cropConfig)}
             aspect={1}

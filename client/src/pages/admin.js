@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Container, Center, TableContainer, Table, Th, Image, Td, Tr, Thead, Tbody, Tfoot, TableCaption, Heading, Menu, MenuButton, MenuItem, MenuList, useDisclosure, Button, Flex, Text, Spacer } from '@chakra-ui/react'
 import { ChevronDownIcon } from "@chakra-ui/icons"
 import NewProduct from '../components/admin/NewProduct'
@@ -10,14 +10,18 @@ import AddArticle from '../components/admin/AddArticle'
 import EditArticle from '../components/admin/EditArticle'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
 import axios from '../utils/axios'
+import { observer } from 'mobx-react-lite'
+import { Context } from "../index";
 
-const Admin = () => {
+const Admin = observer(() => {
     const MAP = {
         'Продукти': 'good/getall',
         'Користувачі': 'user/allUsers',
         'Статті': 'user/articles',
         'Замовлення': 'user/getAllOrders',
     }
+
+    const { good } = useContext(Context);
 
     const [page, setPage] = useState('Продукти')
     const [data, setData] = useState([])
@@ -54,6 +58,16 @@ const Admin = () => {
         }
     }
 
+    function onEditProduct({id, name, typeID, image, price, state}) {
+        good.setId(id);
+        good.setName(name);
+        good.setTypeID(typeID);
+        good.setImage(image);
+        good.setPrice(price);
+        good.setState(state);
+        onEditProductOpen();
+    }
+
     return (
         <Container display="flex" flexDirection="column" alignItems="center" p="30px" maxW="1000px">
             <Menu >
@@ -69,9 +83,6 @@ const Admin = () => {
                     </MenuList>
                 </Center>
             </Menu>
-
-
-
 
             {page === 'Продукти' &&
                 <>
@@ -96,7 +107,7 @@ const Admin = () => {
                                         <Td><Image h="50px" src={product.image} rounded={5} /></Td>
                                         <Td>{product.name}</Td>
                                         <Td textAlign="center">{product.price}₴</Td>
-                                        <Td textAlign="center"><Button colorScheme="teal"><EditIcon /></Button></Td>
+                                        <Td textAlign="center"><Button colorScheme="teal" onClick={() => onEditProduct(product)}><EditIcon /></Button></Td>
                                         <Td textAlign="center"><Button colorScheme="red" onClick={() => deleteProduct(product.id)}><DeleteIcon /></Button></Td>
                                     </Tr>
                                 ))}
@@ -224,6 +235,6 @@ const Admin = () => {
 
 
     )
-}
+})
 
 export default Admin;

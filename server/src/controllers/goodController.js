@@ -110,7 +110,28 @@ class deviceController {
             console.log(e)
             next(badRequest("Error"))
         }
+    }
 
+    async edit(req, res, next) {
+        console.log(req.body);
+        const {name, price} = req.body;
+        const goodId = req.params.id;
+
+        if (!goodId) {
+            return next(err.badRequest("No device data entered"))
+        }
+
+        const product = await goods.findOne({ id: goodId }).exec()
+        if (!product) {
+            return next(err.badRequest("No device"))
+        }
+
+        // product = {...product, name, price, typeID, state};
+        product.name = name;
+        product.price = price;
+        product.save()
+
+        res.send('');
     }
 
 }
