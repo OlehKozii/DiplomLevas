@@ -46,6 +46,14 @@ const Admin = () => {
         getData(MAP[page]);
     }, [page]);
 
+    async function deleteProduct(id) {
+        const response = await axios.delete(`good/${id}`);
+
+        if (response.status === 200) {
+            setData(data.filter(item => item.id !== id))
+        }
+    }
+
     return (
         <Container display="flex" flexDirection="column" alignItems="center" p="30px" maxW="1000px">
             <Menu >
@@ -89,7 +97,7 @@ const Admin = () => {
                                         <Td>{product.name}</Td>
                                         <Td textAlign="center">{product.price}₴</Td>
                                         <Td textAlign="center"><Button colorScheme="teal"><EditIcon /></Button></Td>
-                                        <Td textAlign="center"><Button colorScheme="red"><DeleteIcon /></Button></Td>
+                                        <Td textAlign="center"><Button colorScheme="red" onClick={() => deleteProduct(product.id)}><DeleteIcon /></Button></Td>
                                     </Tr>
                                 ))}
                             </Tbody>

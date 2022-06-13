@@ -49,10 +49,12 @@ class deviceController {
             console.log(e)
             next(err.badRequest(e.message))
         }
+    }
 
-
-
-
+    async deleteProduct(req, res) {
+        const id = req.params.id;
+        const good = await goods.deleteOne({ id: id }).exec();
+        res.send("");
     }
 
     async getOne(req, res, next) {
