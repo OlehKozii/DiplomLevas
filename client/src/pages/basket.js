@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, VStack, Flex, Text, Image, Button } from '@chakra-ui/react'
+import { Box, Container, VStack, Flex, Text, Image, Button, NumberDecrementStepper, NumberIncrementStepper, NumberInputStepper, NumberInputField, NumberInput } from '@chakra-ui/react'
 import { DeleteIcon } from "@chakra-ui/icons";
 import axios from '../utils/axios';
 
@@ -36,16 +36,24 @@ const Basket = () => {
 
     return (
         <Container maxWidth={1080} paddingBottom="200px">
-            <VStack>
-                {basket &&
-                    basket.map((item, i) => {
+            {basket.length ?
+                <VStack> 
+                    {basket.map((item, i) => {
                             return (
                                 <Flex key={i} w="100%" h="150px" rounded={10} bg="gray.200" m={4} p="15px 20px 15px 20px" justifyContent="space-between">
                                     <Flex>
                                         <Image h="100%" w="auto" rounded={5} src={item.image}/>
-                                        <Text mx={4} fontSize="35px" color="gray.800">{item.name}</Text>
+                                        <Flex mx={4} my={1} flexDirection="column" justifyContent="space-between">
+                                            <Text fontSize="35px" color="gray.800" lineHeight="20px">{item.name}</Text>
+                                            <NumberInput defaultValue={item.count} min={1} w="100px" bg="gray.100" rounded={2}>
+                                                <NumberInputField />
+                                                <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                </NumberInputStepper>
+                                            </NumberInput>
+                                        </Flex>
                                     </Flex>
-                                    <Flex>X{item.count}</Flex>
                                     <Flex flexDir="column" justifyContent="space-between" alignItems="flex-end">
                                         <Button w="40px" h="40px" colorScheme="red" onClick={() => deleteGood({id: item.id, itemPrice: item.price * item.count})}>
                                             <DeleteIcon>
@@ -56,14 +64,19 @@ const Basket = () => {
                                     </Flex>
                                 </Flex>
                             )}
-                    )
-                }
-                <Flex alignItems="center" alignSelf="end" borderWidth="2px" borderColor="green.300" rounded={5} bg="green.100" p="20px">
-                    <Text fontSize="30px" marginRight="30px" color="gray.600">{totalPrice}₴</Text>
-                    <Button colorScheme="green">Купити</Button>
-                </Flex>
+                        )}
+                    <Flex alignItems="center" alignSelf="end" borderWidth="2px" borderColor="green.300" rounded={5} bg="green.100" p="20px">
+                        <Text fontSize="30px" marginRight="30px" color="gray.600">{totalPrice}₴</Text>
+                        <Button colorScheme="green">Купити</Button>
+                    </Flex>
             </VStack>
-            
+            :
+            <Box position="fixed" top="50%" left="calc(50% - 30px)">
+                <Text fontSize="40px">
+                    Пусто
+                </Text>
+            </Box>
+        }
         </Container>
     )
 }
