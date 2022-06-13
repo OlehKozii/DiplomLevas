@@ -113,8 +113,7 @@ class deviceController {
     }
 
     async edit(req, res, next) {
-        console.log(req.body);
-        const {name, price} = req.body;
+        const {name, price, typeID, state, info} = req.body;
         const goodId = req.params.id;
 
         if (!goodId) {
@@ -129,6 +128,8 @@ class deviceController {
         // product = {...product, name, price, typeID, state};
         product.name = name;
         product.price = price;
+        product.typeID = typeID;
+        product.state = state;
         product.save()
 
         res.send('');

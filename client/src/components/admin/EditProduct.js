@@ -21,34 +21,51 @@ const EditProduct = observer(({ isOpen, onClose }) => {
     const { good } = useContext(Context);
     const [ name, setName ] = useState();
     const [ price, setPrice ] = useState();
+    const [ typeID, setTypeID ] = useState();
+    const [ state, setState ] = useState();
+    const [info, setInfo] = useState([])
 
-    // const [types, setTypes] = useState([])
-    // const is = ["В наявності", "Закінчується", "Закінчився", "Очікується"]
+    const [types, setTypes] = useState([])
+    const is = ["В наявності", "Закінчується", "Закінчився", "Очікується"]
 
     const submit = async () => {
         const response = await axios.put(`good/${good.id}`, {
             name: name ?? good.name, 
-            price: price ?? good.price
+            price: price ?? good.price,
+            state: state ?? good.status,
+            typeID: typeID ?? good.typeID,
+            info: JSON.stringify(info ?? good.params)
         })
         if (response.status === 200) {
             onClose()
         };
     }
 
-    // const getTypes = async () => {
-    //     const response = await axios.get('type/getAll');
-    //     if (response.status === 200) setTypes(response.data);
-    // }
+    const getTypes = async () => {
+        const response = await axios.get('type/getAll');
+        if (response.status === 200) setTypes(response.data);
+    }
  
+    const addInfo = () => {
+        setInfo([...info, { title: '', description: '', number: Date.now() }])
+    }
+    const removeInfo = (number) => {
+        setInfo(info.filter(i => i.number !== number))
+        console.log(info)
+    }
+    const changeInfo = (key, value, number) => {
+        setInfo(info.map(i => i.number === number ? { ...i, [key]: value } : i))
+    }
+
     const close = () => {
         setName();
         setPrice();
         onClose();
     }
 
-    // useEffect(() => {
-    //     getTypes();
-    // }, []);
+    useEffect(() => {
+        getTypes();
+    }, []);
 
     return (
         <>
@@ -69,20 +86,44 @@ const EditProduct = observer(({ isOpen, onClose }) => {
                             <FormLabel>Ціна</FormLabel>
                             <Input placeholder='Ціна' defaultValue={good.price} value={price} onChange={(e) => setPrice(e.target.value)} />
                         </FormControl>
-                        {/* <FormControl>
+                        <FormControl>
                             <FormLabel>Тип</FormLabel>
                             <Select placeholder="Виберіть тип">
                                 {types.map(i =>
-                                    <option key={i.id} onClick={() => setTypeID(i.id)}>{i.name}</option>
+                                    <option key={i.id} selected={good.typeID === i.id} onClick={() => setTypeID(i.id)}>{i.name}</option>
                                 )}
                             </Select>
                             <FormLabel>Наявність на складі</FormLabel>
-                            <Select placeholder="Виберіть стан">
+                            <Select placeholder="Виберіть стан" defaultValue={good.state} onChange={(e) => setState(e.target.value)} value={state}>
                                 {is.map(i =>
-                                    <option key={i} onClick={() => setState(i)}>{i}</option>
+                                    <option key={i}>{i}</option>
                                 )}
                             </Select>
-                        </FormControl> */}
+                        </FormControl>
+
+                        <FormControl my="15px" display="flex" justifyContent="center">
+                            <Button colorScheme="green"
+                                onClick={addInfo}>Добавити властивості</Button>
+
+                        </FormControl>
+                        {info.map(i =>
+                            <FormControl key={i.number} style={{ display: "flex", marginBottom: "5px" }}>
+                                <div style={{ marginRight: "5px" }}>
+                                    <Input placeholder='Назва'
+                                        onChange={(e) => changeInfo('title', e.target.value, i.number)} />
+
+                                </div>
+                                <div style={{ marginRight: "5px" }}>
+                                    <Input placeholder='Значення'
+                                        onChange={(e) => changeInfo('description', e.target.value, i.number)} />
+                                </div>
+                                <div>
+                                    <Button colorScheme="red"
+                                        onClick={() => removeInfo(i.number)}>-</Button>
+                                </div>
+                            </FormControl>
+                        )}
+
                     </ModalBody>
 
                     <ModalFooter>

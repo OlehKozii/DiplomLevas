@@ -82,6 +82,10 @@ const NewProduct = observer(({ isOpen, onClose }) => {
     }
 
     useEffect(() => {
+        console.log(state);
+    })
+
+    useEffect(() => {
         getTypes();
     }, []);
 
@@ -114,22 +118,22 @@ const NewProduct = observer(({ isOpen, onClose }) => {
                         </FormControl>
                         <FormControl>
                             <FormLabel>Тип</FormLabel>
-                            <Select placeholder="Виберіть тип">
+                            <Select placeholder="Виберіть тип" >
                                 {types.map(i =>
-                                    <option key={i.id} onClick={() => setTypeID(i.id)}>{i.name}</option>
+                                    <option key={i.id}>{i.name}</option>
                                 )}
                             </Select>
                             <FormLabel>Наявність на складі</FormLabel>
-                            <Select placeholder="Виберіть стан">
+                            <Select placeholder="Виберіть стан" onChange={(e) => setState(e.target.value)} value={state}>
                                 {is.map(i =>
-                                    <option key={i} onClick={() => setState(i)}>{i}</option>
+                                    <option key={i}>{i}</option>
                                 )}
                             </Select>
                         </FormControl>
                         <FormLabel></FormLabel>
                         <FormLabel>Властивості</FormLabel>
 
-                        <FormControl style={{ marginBottom: "5px" }}>
+                        <FormControl marginBottom="5px" my="15px" display="flex" justifyContent="center" >
                             <Button colorScheme="green"
                                 onClick={addInfo}>Добавити властивості</Button>
 
