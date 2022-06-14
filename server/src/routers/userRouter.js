@@ -17,6 +17,7 @@ router.get('/article/:id', userController.getArticle)
 router.delete('/deleteArticle/:id', checkAuth, checkRole, userController.deleteArticle)
 
 router.post('/createOrder', checkAuth, userController.createOrder)
+router.get('/getOrders', checkAuth, userController.getOrders)
 router.get("/getAllOrders", checkAuth, checkRole, userController.getAllOrders)
 router.put("/setOrderState/:id", checkAuth, checkRole, userController.setOrderState)
 // router.get('/auth'/*, authMiddleware*/, userController.check)

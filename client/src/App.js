@@ -7,9 +7,10 @@ import NavBar from "./components/NavBar/NavBar";
 import jwt_decode from "jwt-decode";
 import { Context } from ".";
 
+// import 'swiper/swiper-bundle.css
+// import SwiperCore, { Autoplay } from 'swiper';
 
 const App = observer(() => {
-
   const { user } = useContext(Context)
   const [loading, setLoading] = useState(true)
 

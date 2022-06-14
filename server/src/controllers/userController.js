@@ -1,6 +1,6 @@
 const { v4 } = require("uuid")
 const user = require("../models/userModel")
-const { article, order } = require("../models/goodsModel")
+const { article, order, goods } = require("../models/goodsModel")
 const err = require("../errors/err")
 const { createHash, compareHash } = require("../service/bcrypt")
 const generateToken = require("../service/jwt")
@@ -175,6 +175,35 @@ class userController {
             console.log(e);
         }
     }
+
+    async getOrders(req, res) {
+        try {
+            const { user } = req;
+            const orders = await order.find({id: { $in: user.orders }}).exec()
+
+            const a = orders.map(async (orderItem) => {
+                const basket = await Promise.all(orderItem.basket.map(async (item) => {
+                    // console.log('id: ', item.id);
+                    const product = await goods.findOne({ id: item.id }).exec();
+                    // console.log('product: ', product);
+                    if (product) return {...product._doc, count: item.count};
+                }));
+                Promise.all(basket)
+                    .then((basket) => {
+                        orderItem.basket = basket;
+                    })
+                    .then(() => console.log(orderItem));
+                // console.log(basket);
+                // order.basket = basket;
+                // console.log(order);
+            });
+            console.log(orders[1].basket);
+            res.send(orders);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     async getAllOrders(req, res) {
         try {
             const orders = await order.find({}).exec()

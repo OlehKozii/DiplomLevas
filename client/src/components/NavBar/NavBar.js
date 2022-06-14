@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 // import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 // import FilterFramesIcon from '@mui/icons-material/FilterFrames';
 import { Link } from "react-router-dom";
-import { SHOP_ROUTE, BASKET_ROUTE, MAIN_ROUTE, NEWS_ROUTE, SIGN_IN } from "../../routes/const";
+import { SHOP_ROUTE, BASKET_ROUTE, MAIN_ROUTE, NEWS_ROUTE, SIGN_IN, ORDERS } from "../../routes/const";
 import { SimpleGrid, Button, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerCloseButton, DrawerBody, Text, Box, useMediaQuery } from "@chakra-ui/react";
 
 const NavBar = observer(() => {
@@ -42,8 +42,8 @@ const NavBar = observer(() => {
                   {/* <ShoppingCartIcon></ShoppingCartIcon> */}
                   Кошик
                 </Link>
-                <Link to="/">
-                  ...
+                <Link to={ORDERS}>
+                  Замовлення
                   {/* <FilterFramesIcon></FilterFramesIcon> */}
                 </Link>
                 <Link to="/" onClick={() => logOut()}>Вийти</Link>
@@ -72,7 +72,7 @@ const NavBar = observer(() => {
             {user._isAuth ?
               <>
                 <Link to={BASKET_ROUTE} onClick={onClose}><Text fontSize='4xl'>Кошик</Text></Link>
-                <Link to="/"><Text fontSize='4xl'>Мої замовлення</Text></Link>
+                <Link to={ORDERS}><Text fontSize='4xl'>Мої замовлення</Text></Link>
                 <Link to="/" onClick={() => logOut()}><Text fontSize='4xl'>Вийти</Text></Link>
               </>
               :

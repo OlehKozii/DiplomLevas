@@ -1,10 +1,9 @@
 import React from "react";
 import {
   ADMIN_ROUTE,
-  LOGIN_ROUTE,
-  REGISTRATION_ROUTE,
   SHOP_ROUTE,
   BASKET_ROUTE,
+  ORDERS,
   GOOD_ROUTE,
   MAIN_ROUTE,
   NEWS_ROUTE,
@@ -14,6 +13,7 @@ import {
 
 const Admin = React.lazy(() => import("../pages/admin"));
 const Basket = React.lazy(() => import("../pages/basket"));
+const Orders = React.lazy(() => import('../pages/orders'));
 const Good = React.lazy(() => import("../pages/goodsPage"));
 const Shop = React.lazy(() => import("../pages/shop"));
 const Main = React.lazy(() => import("../pages/Main"));
@@ -39,6 +39,10 @@ export const authRoutes = [
 ];
 
 export const publicRoutes = [
+  {
+    path: ORDERS,
+    element: <Orders />
+  },
   {
     path: BASKET_ROUTE,
     element: <Basket />,

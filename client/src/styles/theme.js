@@ -2,10 +2,16 @@ import { extendTheme } from "@chakra-ui/react";
 // import { FlexStyles as Flex } from "./components/Flex";
 
 export const Theme = extendTheme({
+    colors: {
+        gray: {
+            100: "#f7f7f8",
+            200: "#f0f0f0"
+        }
+    },
     styles: {
         global: {
             body: {
-                bg: 'gray.100'
+                bg: 'gray.200'
             }
         }
     },
