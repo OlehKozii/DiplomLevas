@@ -17,7 +17,7 @@ import { observer } from "mobx-react-lite";
 import axios from '../../utils/axios';
 import { Context } from "../..";
 
-const EditProduct = observer(({ isOpen, onClose }) => {
+const EditProduct = observer(({ isOpen, onClose, cb }) => {
     const { good } = useContext(Context);
     const [ name, setName ] = useState();
     const [ price, setPrice ] = useState();
@@ -37,6 +37,7 @@ const EditProduct = observer(({ isOpen, onClose }) => {
             info: JSON.stringify(info ?? good.params)
         })
         if (response.status === 200) {
+            cb();
             onClose()
         };
     }

@@ -28,18 +28,21 @@ import {
     SliderTrack,
     SliderFilledTrack,
     SliderThumb,
-    Tooltip
+    Tooltip,
+    Spacer,
+    Link
 } from '@chakra-ui/react'
 
 const Good = observer(() => {
     const { good, user } = useContext(Context);
-    console.log("User: ", user);
     const [data, setData] = useState({});
+    const [count, setCount] = useState(1);
     const [commentText, setCommentText] = useState('');
-    const [sliderValue, setSliderValue] = useState(50)
-    const [showTooltip, setShowTooltip] = useState(false)
+    const [sliderValue, setSliderValue] = useState(50);
+    const [showTooltip, setShowTooltip] = useState(false);
+    const [isLoading, setLoading] = useState(false);
 
-    function getSliderColor(value) {
+    function getColor(value) {
         switch (true) {
             case (value >= 75):
                 return 'green';
@@ -69,9 +72,20 @@ const Good = observer(() => {
         }
     }
 
+    async function addToBasket() {
+        const response = await axios.post('basket/addMany', { goodId: good.id, count });
+        setLoading(true);
+        if (response) {
+            setLoading(false);
+        };
+    }
+
     async function addComment() {
         const newComment = { name: user.user.name, text: commentText, time: new Date(), grade: sliderValue }
-        setData({ ...data, comments: [newComment, ...data.comments] });
+        const newData = { ...data, comments: [newComment, ...data.comments] };
+        const newGrade = newData.comments.reduce((r, c) => r + c.grade, 0) / newData.comments.length;
+        newData.grade = newGrade;
+        setData(newData);
         const response = await axios.post(`good/addComment/${good.id}`, newComment);
         setCommentText('');
     }
@@ -82,23 +96,47 @@ const Good = observer(() => {
 
     return (
         <Container p={30} maxWidth={1080}>
+            {data && <>
             <Box bg="whiteAlpha.500" rounded={10} p='10px 30px 40px 30px'>
-                <Text marginBottom="10px" fontSize='4xl'>{data?.name}</Text>
                 <SimpleGrid minChildWidth='350px' spacing="25px">
-                    <Box>
-                        <Image src={data?.image} rounded={5} w="100%" h="auto" objectFit="cover" />
+                    <Box p="10px">
+                        <Image src={data.image} rounded={5} w="100%" h="auto" objectFit="cover" />
                     </Box>
-                    <Box display='flex' flexDirection="column" justifyContent="flex-end">
-                        <Box>
-                        </Box>
+                    <Box display='flex' flexDirection="column" justifyContent="space-between">
+                        <Text marginBottom="30px" fontSize='4xl'>{data.name}</Text>
+                        
+                        {data?.comments?.length ? 
+                        <>
+                            <Box>
+                                <Flex>
+                                    <Text fontSize='30px' color="gray.500">Рейтинг товару: </Text> 
+                                    <Spacer />
+                                    <Text as="span" color={getColor(data.grade)} fontSize='45px' lineHeight="40px" mx="10px">
+                                        {data.grade}%
+                                    </Text>
+                                </Flex>
+                                <Flex fontSize='30px' color="gray.500" my="20px">
+                                    <Text fontSize='30px' color="gray.500">Кількість відгуків: </Text>
+                                    <Spacer />
+                                    <Text as="span" fontSize='35px' mx="10px">
+                                        <Link href="#comments">{data?.comments?.length}</Link>
+                                    </Text>
+                                </Flex>
+                            </Box>
+                        </>
+                        :
+                        <Flex justifyContent="center" m="10px 0 30px 0">
+                            <Text fontSize='30px' color="gray.500">Ще немає відгуків</Text>
+                        </Flex>
+                        }
                         <Box borderWidth='1px' borderColor="gray.300" rounded={10} p="15px">
-                            <Flex marginBottom="10px" justifyContent="space-between" alignItems="end">
-                                <Text fontSize="45px">{data?.price}₴</Text>
+                            <Flex marginBottom="30px" justifyContent="space-between" alignItems="end">
+                                <Text fontSize="50px">{data.price}₴</Text>
                                 <Box>
                                     <Text fontSize="16px" fontWeight="500" marginBottom="10px" color={COLOR_MAP[data.state]}>{data.state}</Text>
                                     <Flex fontSize="18px">
                                         Кількість:
-                                        <NumberInput marginLeft="10px" size='xs' maxW={14} defaultValue={1} min={1}>
+                                        <NumberInput marginLeft="10px" size='xs' value={count} onChange={(value) => setCount(value)} maxW={14} min={1}>
                                             <NumberInputField />
                                             <NumberInputStepper>
                                                 <NumberIncrementStepper />
@@ -108,7 +146,7 @@ const Good = observer(() => {
                                     </Flex>
                                 </Box>
                             </Flex>
-                            <Button width="100%" colorScheme="teal">Купити</Button>
+                            <Button width="100%" colorScheme="teal" onClick={() => addToBasket()} isDisabled={isLoading}>Додати в кошик</Button>
                         </Box>
                     </Box>
                 </SimpleGrid>
@@ -120,8 +158,8 @@ const Good = observer(() => {
                         <Tbody>
                             {data?.params?.map(param => (
                                 <Tr>
-                                    <Td ><b>{param.title}</b></Td>
-                                    <Td >{param.description}</Td>
+                                    <Td><b>{param.title}</b></Td>
+                                    <Td>{param.description}</Td>
                                 </Tr>
                             ))}
                         </Tbody>
@@ -151,7 +189,7 @@ const Good = observer(() => {
                             onChange={(v) => setSliderValue(v)}
                             onMouseEnter={() => setShowTooltip(true)}
                             onMouseLeave={() => setShowTooltip(false)}
-                            colorScheme={getSliderColor(sliderValue)}
+                            colorScheme={getColor(sliderValue)}
                         >
                             <SliderMark value={25} mt='1' ml='-2.5' fontSize='sm'>
                                 25%
@@ -167,7 +205,7 @@ const Good = observer(() => {
                             </SliderTrack>
                             <Tooltip
                                 hasArrow
-                                bg={getSliderColor(sliderValue)}
+                                bg={getColor(sliderValue)}
                                 color='white'
                                 placement='top'
                                 isOpen={showTooltip}
@@ -192,10 +230,11 @@ const Good = observer(() => {
             </Box>
 
             <Box bg="whiteAlpha.500" rounded={10} p={15} my='20px' display="flex" flexDir='column'>
-                <VStack spacing="35px">
+                <VStack spacing="35px" id="comments">
                     {data?.comments?.map((props, i) => <Comment key={i} {...props} />)}
                 </VStack>
             </Box>
+            </>}
         </Container >
     )
 })

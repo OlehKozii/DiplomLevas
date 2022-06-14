@@ -16,6 +16,9 @@ class err extends Error{
     static forbidden(message){
         return new err(403,message)
     }
+    static unauthorized(message){
+        return new err(401,message)
+    }
 }
 
 module.exports = err

@@ -169,8 +169,6 @@ const Admin = observer(() => {
             {
                 page === 'Користувачі' &&
                 <>
-                    <Button onClick={onUsersOpen} marginBottom="20px">Список користувачів</Button>
-
                     <TableContainer>
                         <Table bg='gray.200' variant='striped' rounded={10}>
                             <TableCaption>Список усіх користувачів</TableCaption>
@@ -306,7 +304,8 @@ const Admin = observer(() => {
             />
             <EditProduct
                 isOpen={isEditProductOpen}
-                onClose={onEditProductClose} />
+                onClose={onEditProductClose}
+                cb={() => getData(MAP['Продукти'])} />
             <AddProductType
                 isOpen={isAddProductTypeOpen}
                 onClose={onAddProductTypeClose} />

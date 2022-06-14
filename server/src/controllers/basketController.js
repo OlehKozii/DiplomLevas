@@ -55,6 +55,34 @@ class basketController {
         res.send('');
     }
 
+    async addMany(req, res, next) {
+        const { goodId, count } = req.body;
+        const { user } = req
+
+        if (!goodId) {
+            return next(err.badRequest("No device data entered"))
+        }
+        
+        const product = await goods.findOne({ id: goodId }).exec()
+        if (!product) {
+            return next(err.badRequest("No device"))
+        }
+
+        const index = user.basket.findIndex((i) => i.id == goodId);
+        if (index === -1) {
+            user.basket.push({
+                id: product.id,
+                count: Number(count)
+            })
+        } else {
+            user.basket[index].count += Number(count);
+        }
+
+        await user.save();
+
+        res.send('');
+    }
+
     async remove(req, res, next) {
         const goodId = req.params.id;
         const { id } = req.user;

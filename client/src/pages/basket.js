@@ -8,11 +8,7 @@ const Basket = () => {
     const [totalPrice, setTotalPrice] = useState(0);
 
     async function getBasket() {
-        const response = await axios.get('basket/get', {
-            headers: {
-                'Authorization': localStorage.getItem('Token')
-            }
-        });
+        const response = await axios.get('basket/get');
 
         if (response.status === 200) {
             setBasket(response.data)
@@ -29,9 +25,13 @@ const Basket = () => {
         }
     }
 
+    function recalculate() {
+        const total = basket.reduce((total, item) => total + item.price * item.count, 0);
+        setTotalPrice(total);
+    }
+
     useEffect(() => {
         getBasket()
-
     }, []);
 
     return (
@@ -45,7 +45,7 @@ const Basket = () => {
                                         <Image h="100%" w="auto" rounded={5} src={item.image}/>
                                         <Flex mx={4} my={1} flexDirection="column" justifyContent="space-between">
                                             <Text fontSize="35px" color="gray.800" lineHeight="20px">{item.name}</Text>
-                                            <NumberInput defaultValue={item.count} min={1} w="100px" bg="gray.100" rounded={2}>
+                                            <NumberInput defaultValue={item.count} min={1} w="100px" bg="gray.100" rounded={2} onChange={(value) => {item.count = value; recalculate()}}>
                                                 <NumberInputField />
                                                 <NumberInputStepper>
                                                     <NumberIncrementStepper />

@@ -20,20 +20,17 @@ const OneProduct = observer(({ param }) => {
         "Закінчився": "red.500",
         "Очікується": "teal.400"
     }
-    const goToGoodPage = () => {
+
+
+    async function goToGoodPage(){
         const name = cyrillicToTranslit.transform(param.name, '-').toLowerCase();
         good.setId(param.id);
         navigator(GOOD_ROUTE + `/${name}`)
     };
 
-
-    const addToCart = async (e) => {
+    async function addToBasket(e) {
         e.stopPropagation();
-        const response = await axios.post('basket/add', { goodId: param.id }, {
-            headers: {
-                'Authorization': localStorage.getItem("Token")
-            }
-        });
+        const response = await axios.post('basket/add', { goodId: param.id });
 
         if (response.status === 200) {
 
@@ -49,7 +46,7 @@ const OneProduct = observer(({ param }) => {
             <Flex justifyContent="space-between" w="80%">
                 <div className="Price"><p style={{ fontSize: "24px" }}>{param.price}₴</p></div>
                 <div className="Cart">
-                    <Button colorScheme="teal" h="30px" isDisabled={!user.isAuth} onClick={(e) => addToCart(e)}>
+                    <Button colorScheme="teal" h="30px" isDisabled={!user.isAuth} onClick={(e) => addToBasket(e)}>
                         Кошик
                         {/* <ShoppingCartIcon></ShoppingCartIcon> */}
                     </Button>

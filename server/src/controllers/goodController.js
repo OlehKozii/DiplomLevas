@@ -76,7 +76,11 @@ class deviceController {
         if (!good) {
             return next(err.badRequest("No such device"))
         }
-        return res.send(good)
+        let grade = null;
+        if (good.comments) {
+            grade = good.comments.reduce((r, c) => r + c.grade, 0) / good.comments.length;
+        }
+        return res.send({...good._doc, grade})
     }
 
     async addComment(req, res, next) {

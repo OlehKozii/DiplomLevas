@@ -7,4 +7,14 @@ const instance = axios.create({
   }
 });
 
+instance.interceptors.response.use(
+  res => res,
+  error => {
+    if (error.response.status === 401) {
+      localStorage.removeItem("Token");
+    };
+    return Promise.reject(error);
+  }
+);
+
 export default instance;
