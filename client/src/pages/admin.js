@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Container, Center, TableContainer, Table, Th, Image, Td, Tr, Thead, Tbody, Tfoot, TableCaption, Heading, Menu, MenuButton, MenuItem, MenuList, useDisclosure, Button, Flex, Text, Spacer } from '@chakra-ui/react'
+import { Option, Select, Container, Center, TableContainer, Table, Th, Image, Td, Tr, Thead, Tbody, Tfoot, TableCaption, Heading, Menu, MenuButton, MenuItem, MenuList, useDisclosure, Button, Flex, Text, Spacer } from '@chakra-ui/react'
 import { ChevronDownIcon } from "@chakra-ui/icons"
 import NewProduct from '../components/admin/NewProduct'
 import EditProduct from '../components/admin/EditProduct'
@@ -68,6 +68,43 @@ const Admin = observer(() => {
         onEditProductOpen();
     }
 
+    async function editArticle(id) {
+        const response = await axios.delete(`good/${id}`);
+
+        if (response.status === 200) {
+            setData(data.filter(item => item.id !== id))
+        }
+    }
+
+    async function deleteArticle(id) {
+        const response = await axios.delete(`user/deleteArticle/${id}`);
+
+        if (response.status === 200) {
+            setData(data.filter(item => item.id !== id));
+        }
+    }
+
+    async function setRole(role, id) {
+        const response = await axios.post(`user/setRole/${id}`, {role});
+        if (response) {
+            getData(MAP['Користувачі']);
+        }
+    }
+
+    async function deleteUser(id) {
+        const response = await axios.delete(`user/deleteUser/${id}`);
+        if (response) {
+            setData(data.filter(user => user.id !== id));
+        }
+    }
+
+    async function setOrderState(state, id) {
+        const response = await axios.put(`user/setOrderState/${id}`, {state});
+        if (response) {
+            getData(MAP['Замовлення']);
+        }
+    }
+
     return (
         <Container display="flex" flexDirection="column" alignItems="center" p="30px" maxW="1000px">
             <Menu >
@@ -97,6 +134,7 @@ const Admin = observer(() => {
                                     <Th>Зображення</Th>
                                     <Th>Назва</Th>
                                     <Th>Ціна</Th>
+                                    <Th>Стан</Th>
                                     <Th>Змінити</Th>
                                     <Th>Видалити</Th>
                                 </Tr>
@@ -107,6 +145,7 @@ const Admin = observer(() => {
                                         <Td><Image h="50px" src={product.image} rounded={5} /></Td>
                                         <Td>{product.name}</Td>
                                         <Td textAlign="center">{product.price}₴</Td>
+                                        <Td textAlign="center">{product.state}</Td>
                                         <Td textAlign="center"><Button colorScheme="teal" onClick={() => onEditProduct(product)}><EditIcon /></Button></Td>
                                         <Td textAlign="center"><Button colorScheme="red" onClick={() => deleteProduct(product.id)}><DeleteIcon /></Button></Td>
                                     </Tr>
@@ -117,6 +156,7 @@ const Admin = observer(() => {
                                     <Th>Зображення</Th>
                                     <Th>Назва</Th>
                                     <Th>Ціна</Th>
+                                    <Th>Стан</Th>
                                     <Th>Змінити</Th>
                                     <Th>Видалити</Th>
                                 </Tr>
@@ -139,6 +179,8 @@ const Admin = observer(() => {
                                     <Th>Ідентифікатор</Th>
                                     <Th>Ім'я</Th>
                                     <Th>Email</Th>
+                                    <Th>Роль</Th>
+                                    <Th>Видалити</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -147,6 +189,13 @@ const Admin = observer(() => {
                                         <Td>{user.id}</Td>
                                         <Td>{user.name}</Td>
                                         <Td>{user.email}</Td>
+                                        <Td>
+                                            <Select value={user.role} onChange={(e) => setRole(e.target.value, user.id)}>
+                                                <option>customer</option>
+                                                <option>admin</option>
+                                            </Select>  
+                                        </Td>
+                                        <Td><Button colorScheme="red" onClick={() => deleteUser(user.id)}><DeleteIcon /></Button></Td>
                                     </Tr>
                                 ))}
                             </Tbody>
@@ -155,6 +204,8 @@ const Admin = observer(() => {
                                     <Th>Ідентифікатор</Th>
                                     <Th>Ім'я</Th>
                                     <Th>Email</Th>
+                                    <Th>Роль</Th>
+                                    <Th>Видалити</Th>
                                 </Tr>
                             </Tfoot>
                         </Table>
@@ -165,8 +216,6 @@ const Admin = observer(() => {
             {
                 page === 'Замовлення' &&
                 <>
-                    <Button onClick={onOrdersOpen} marginBottom="20px">Переглянути замовлення</Button>
-
                     <TableContainer>
                         <Table bg='gray.200' variant='striped' rounded={10}>
                             <TableCaption>Список усіх користувачів</TableCaption>
@@ -174,6 +223,7 @@ const Admin = observer(() => {
                                 <Tr>
                                     <Th>Ідентифікатор</Th>
                                     <Th>Ціна</Th>
+                                    <Th>Стан</Th>
                                     <Th>Дата та час</Th>
                                 </Tr>
                             </Thead>
@@ -182,6 +232,14 @@ const Admin = observer(() => {
                                     <Tr>
                                         <Td>{order.id}</Td>
                                         <Td>{order.price}₴</Td>
+                                        <Td>
+                                            <Select value={order.state} onChange={(e) => setOrderState(e.target.value, order.id)}>
+                                                <option>В обробці</option>
+                                                <option>Відправлено</option>
+                                                <option>Очікує отримання</option>
+                                                <option>Скасовано</option>
+                                            </Select>
+                                        </Td>
                                         <Td>{order.time}</Td>
                                     </Tr>
                                 ))}
@@ -190,6 +248,7 @@ const Admin = observer(() => {
                                 <Tr>
                                     <Th>Ідентифікатор</Th>
                                     <Th>Ціна</Th>
+                                    <Th>Стан</Th>
                                     <Th>Дата та час</Th>
                                 </Tr>
                             </Tfoot>
@@ -201,16 +260,49 @@ const Admin = observer(() => {
             {
                 page === 'Статті' &&
                 <>
-                    <Button onClick={onAddArticleOpen}>Добавити статтю</Button>
-                    <Button onClick={onEditArticleOpen}>Редагувати статтю</Button>
-
-
+                    <Button marginBottom="20px" onClick={onAddArticleOpen}>Добавити статтю</Button>
+                
+                    <TableContainer>
+                        <Table bg='gray.200' variant='striped' rounded={10}>
+                            <TableCaption>Список усіх користувачів</TableCaption>
+                            <Thead>
+                                <Tr>
+                                    <Th>Ідентифікатор</Th>
+                                    <Th>Заголовок</Th>
+                                    <Th>Уривок тексту</Th>
+                                    <Th>Змінити</Th>
+                                    <Th>Видалити</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {data.map(article => (
+                                    <Tr>
+                                        <Td>{article.id}</Td>
+                                        <Td>{article.header}</Td>
+                                        <Td>{article.text}</Td>
+                                        <Td><Button colorScheme="teal" onClick={() => editArticle(article.id)}><EditIcon /></Button></Td>
+                                        <Td><Button colorScheme="red" onClick={() => deleteArticle(article.id)}><DeleteIcon /></Button></Td>
+                                    </Tr>
+                                ))}
+                            </Tbody>
+                            <Tfoot>
+                                <Tr>
+                                    <Th>Ідентифікатор</Th>
+                                    <Th>Заголовок</Th>
+                                    <Th>Уривок тексту</Th>
+                                    <Th>Змінити</Th>
+                                    <Th>Видалити</Th>
+                                </Tr>
+                            </Tfoot>
+                        </Table>
+                    </TableContainer>
                 </>
             }
 
             <NewProduct
                 isOpen={isNewProductOpen}
                 onClose={onNewProductClose}
+                cb={() => getData(MAP['Продукти'])}
             />
             <EditProduct
                 isOpen={isEditProductOpen}
@@ -226,7 +318,8 @@ const Admin = observer(() => {
                 onClose={onOrdersClose} />
             <AddArticle
                 isOpen={isAddArticleOpen}
-                onClose={onAddArticleClose} />
+                onClose={onAddArticleClose}
+                cb={() => getData(MAP['Статті'])} />
             <EditArticle
                 isOpen={isEditArticleOpen}
                 onClose={onEditArticleClose} />

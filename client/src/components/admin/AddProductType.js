@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
     Button,
     Modal,
@@ -12,8 +12,16 @@ import {
     ModalBody,
     ModalFooter
 } from "@chakra-ui/react";
+import axios from '../../utils/axios';
 
 function AddProductType({ isOpen, onClose }) {
+    const [type, setType] = useState();
+    
+    async function addType() {
+        const response = axios.post('good/addType', { typeName: type });
+        onClose()
+    }
+
     return (
         <>
             <Modal
@@ -27,12 +35,12 @@ function AddProductType({ isOpen, onClose }) {
                     <ModalBody pb={6}>
                         <FormControl>
                             <FormLabel>Назва</FormLabel>
-                            <Input placeholder='Назва' />
+                            <Input placeholder='Назва' value={type} onChange={(e) => setType(e.target.value)} />
                         </FormControl>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3}>
+                        <Button onClick={addType} colorScheme='blue' mr={3}>
                             Додати
                         </Button>
                         <Button onClick={onClose}>Скасувати</Button>

@@ -83,13 +83,10 @@ class basketController {
 
         const basket = await Promise.all(user.basket.map(async (item) => {
             const product = await goods.findOne({ id: item.id }).exec();
-            return {...product._doc, count: item.count};
+            if (product) return {...product._doc, count: item.count};
         }));
 
         Promise.all(basket);
-
-        console.log(basket);
-
         res.send(basket);
     }
 

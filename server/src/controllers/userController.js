@@ -52,6 +52,32 @@ class userController {
         }
     }
 
+    async setRole(req, res, next) {
+        try {
+            const {id} = req.params;
+            const {role} = req.body;
+            const candidate = await user.findOne({id}).exec();
+            if (!candidate) return next(err.badRequest("Cannot set role"));
+            candidate.role = role;
+            candidate.save();
+            res.send(""); 
+        } catch (e) {
+            console.log(e);
+            return next(err.badRequest("Cannot set role"));
+        }
+    }
+
+    async deleteUser(req, res, next) {
+        try {
+            const {id} = req.params;
+            const candidate = await user.deleteOne({id}).exec();
+            res.send(""); 
+        } catch (e) {
+            console.log(e);
+            return next(err.badRequest("Cannot delete user"));
+        }
+    }
+
     async getAllUsers(req, res, next) {
         try {
             const users = await user.find({}).exec();
@@ -65,10 +91,12 @@ class userController {
     async createArticle(req, res, next) {
         try {
             const { header, text } = req.body;
-            const newArticle = new article({ id: v4().toString(), header, text });
+            console.log(header, text);
+            const candidate = new article({ id: v4().toString(), header, text });
+            console.log(candidate)
             if (!candidate) return next(err.badRequest("Cannot create article"));
-            await newArticle.save();
-            res.send(newArticle);
+            await candidate.save();
+            res.send(candidate);
         } catch (e) {
             console.log(e);
             return next(err.badRequest("Cannot create article"));
@@ -153,6 +181,21 @@ class userController {
             res.send(orders)
         } catch (e) {
             console.log(e);
+        }
+    }
+
+    async setOrderState(req, res) {
+        try {
+            const {id} = req.params;
+            const {state} = req.body;
+            const candidate = await order.findOne({id}).exec();
+            if (!candidate) return next(err.badRequest("Cannot set state"));
+            candidate.state = state;
+            candidate.save();
+            res.send(""); 
+        } catch (e) {
+            console.log(e);
+            return next(err.badRequest("Cannot set state"));
         }
     }
 

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import OneProduct from "../components/goodsList/oneProduct";
 import axios from '../utils/axios';
-import { Box, FormLabel, Container, Select, SimpleGrid, DrawerHeader, DrawerBody, Input, Checkbox, DrawerFooter, Button, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton } from "@chakra-ui/react";
+import { Box, FormLabel, Container, Select, SimpleGrid, DrawerHeader, DrawerBody, Input, Checkbox, DrawerFooter, Button, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, Flex } from "@chakra-ui/react";
 
 const is = ["В наявності", "Закінчується", "Закінчився", "Очікується"]
 
 const Shop = () => {
-    // const { good } = useContext(Context)
     const [typeID, setTypeID] = useState([])
     const [state, setState] = useState("")
     const [discount, setDiscount] = useState(false)
@@ -87,13 +86,13 @@ const Shop = () => {
                                 )}
                             </Select>
                         </Box>
-                        <Box>
+                        <Flex flexDir="column">
                             {typesList.map((filter) =>
 
-                                <Checkbox key={filter.id} onChange={(e) => { check(e.target.checked, filter.id); }}>{filter.name}</Checkbox>
+                                <Checkbox my="5px" key={filter.id} onChange={(e) => { check(e.target.checked, filter.id); }}>{filter.name}</Checkbox>
 
                             )}
-                        </Box>
+                        </Flex>
                         <Box>
                             <FormLabel>Гарячі пропозиції</FormLabel>
                             <Checkbox onClick={() => { setDiscount(!discount); }}>Акційний товар</Checkbox>

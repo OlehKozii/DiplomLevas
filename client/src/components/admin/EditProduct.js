@@ -51,7 +51,6 @@ const EditProduct = observer(({ isOpen, onClose }) => {
     }
     const removeInfo = (number) => {
         setInfo(info.filter(i => i.number !== number))
-        console.log(info)
     }
     const changeInfo = (key, value, number) => {
         setInfo(info.map(i => i.number === number ? { ...i, [key]: value } : i))

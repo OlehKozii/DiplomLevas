@@ -15,11 +15,9 @@ import {
 } from "@chakra-ui/react";
 import axios from '../../utils/axios';
 import { observer } from "mobx-react-lite";
-import { useNavigate } from "react-router-dom";
 import ImageCropper from '../cropImage';
 
-const NewProduct = observer(({ isOpen, onClose }) => {
-    const navigator = useNavigate();
+const NewProduct = observer(({ isOpen, onClose, cb }) => {
     const [info, setInfo] = useState([])
     const [name, setName] = useState("")
     const [price, setPrice] = useState(0)
@@ -56,7 +54,7 @@ const NewProduct = observer(({ isOpen, onClose }) => {
         setInfo(info.map(i => i.number === number ? { ...i, [key]: value } : i))
     }
 
-    const submit = async () => {
+    const submit = () => {
         const formData = new FormData()
         formData.append('name', name)
         formData.append('price', price)
@@ -64,26 +62,33 @@ const NewProduct = observer(({ isOpen, onClose }) => {
         formData.append('typeID', typeID)
         formData.append('state', state)
         formData.append('info', JSON.stringify(info))
-        const response = await axios.post('good/create', formData, {
+        axios.post('good/create', formData, {
             headers: {
                 'content-type': 'multipart/form-data',
-                'Authorization': localStorage.getItem('Token')
             }
         })
-        if (response.status === 200) {
-            onClose()
-        };
-
+        .then(() => {
+            cb();
+            onClose();
+        })
     }
+
+    const close = () => {
+        setInfo([])
+        setName("")
+        setPrice(0)
+        setTypeID("1")
+        setImage(null)
+        setImageUrl(null)
+        setState("")
+        onClose();
+    }
+
 
     const getTypes = async () => {
         const response = await axios.get('type/getAll');
         if (response.status === 200) setTypes(response.data);
     }
-
-    useEffect(() => {
-        console.log(state);
-    })
 
     useEffect(() => {
         getTypes();
@@ -93,7 +98,7 @@ const NewProduct = observer(({ isOpen, onClose }) => {
         <>
             <Modal
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={close}
             >
                 <ModalOverlay />
                 <ModalContent>
