@@ -3,7 +3,7 @@ import * as React from 'react'
 import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa'
 
 export const Footer = () => (
-  <Container as="footer" color="gray.100" py='12' px="60px" maxWidth="100%" bg="gray.900">
+  <Container as="footer" color="gray.100" marginTop="100px" py='12' px="60px" maxWidth="100%" bg="gray.900">
     <Stack spacing={{ base: '4', md: '5' }}>
       <Stack justify="space-between" direction="row" align="center">
         <Text fontSize="40px">Levas</Text>

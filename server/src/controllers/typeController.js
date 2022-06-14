@@ -27,6 +27,15 @@ class typeController {
         return res.json(myType)
     }
 
+
+    async delete(req, res, next) {
+        const id = req.params.id;
+        if (!id) {
+            return next(err.badRequest("No type name!"))
+        }
+        const type = awaittype.deleteOne({id}).exec();
+        res.send(type);
+    }
 }
 
 module.exports = new typeController()

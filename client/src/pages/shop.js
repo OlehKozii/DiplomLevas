@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import OneProduct from "../components/goodsList/oneProduct";
 import axios from '../utils/axios';
-import { Box, FormLabel, Container, Select, SimpleGrid, DrawerHeader, DrawerBody, Input, Checkbox, DrawerFooter, Button, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, Flex } from "@chakra-ui/react";
+import { Box, FormLabel, Container, Select, SimpleGrid, DrawerHeader, DrawerBody, Checkbox, DrawerFooter, Button, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, Flex } from "@chakra-ui/react";
 
 const is = ["В наявності", "Закінчується", "Закінчився", "Очікується"]
 
@@ -76,7 +76,7 @@ const Shop = () => {
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerCloseButton />
-                    <DrawerHeader>Create your account</DrawerHeader>
+                    <DrawerHeader>Фільтер</DrawerHeader>
 
                     <DrawerBody>
                         <Box>

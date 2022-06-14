@@ -5,9 +5,11 @@ import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 // import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 // import FilterFramesIcon from '@mui/icons-material/FilterFrames';
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { FaJediOrder } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { SHOP_ROUTE, BASKET_ROUTE, MAIN_ROUTE, NEWS_ROUTE, SIGN_IN, ORDERS } from "../../routes/const";
-import { SimpleGrid, Button, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerCloseButton, DrawerBody, Text, Box, useMediaQuery } from "@chakra-ui/react";
+import { SimpleGrid, Image, Button, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerCloseButton, DrawerBody, Text, Box, useMediaQuery } from "@chakra-ui/react";
 
 const NavBar = observer(() => {
   const { user } = useContext(Context);
@@ -33,7 +35,7 @@ const NavBar = observer(() => {
           :
           <Box></Box>
         }
-        <Box display="flex" justifyContent='center' className="Logo" ><Link to={MAIN_ROUTE}><Text fontSize='35px'>Levas</Text></Link></Box >
+        <Box display="flex" justifyContent='center' className="Logo" ><Link to={MAIN_ROUTE}><Image src="../../../logo.png" h="50px" /></Link></Box >
         {!isSmallerThan830 ?
           <Box display="flex" justifyContent='end' alignItems='center' px="20px">
             {user._isAuth ?
@@ -43,7 +45,7 @@ const NavBar = observer(() => {
                   Кошик
                 </Link>
                 <Link to={ORDERS}>
-                  Замовлення
+                  <FaJediOrder />
                   {/* <FilterFramesIcon></FilterFramesIcon> */}
                 </Link>
                 <Link to="/" onClick={() => logOut()}>Вийти</Link>

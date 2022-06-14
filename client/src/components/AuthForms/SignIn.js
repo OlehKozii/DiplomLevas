@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 import { SIGN_UP } from "../../routes/const";
 import { Link } from "react-router-dom";
 import { Button, Input, Heading, FormControl } from "@chakra-ui/react";
+import jwtDecode from "jwt-decode";
 
 const SignInForm = observer(() => {
     const { user } = useContext(Context);
@@ -24,7 +25,13 @@ const SignInForm = observer(() => {
     const submit = async () => {
         const response = await axios.post('user/login', { email, password });
         if (response.status === 200) {
-            user.setUser(true)
+            var decode = jwtDecode(response.data.token)
+            user.setUser({
+                id: decode.id,
+                name: decode.name,
+                email: decode.email,
+                role: decode.role
+            })
             user.setIsAuth(true)
             localStorage.setItem("Token", "Bearer " + response.data.token);
             navigator('/');

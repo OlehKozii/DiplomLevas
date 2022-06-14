@@ -4,8 +4,7 @@ import { ChevronDownIcon } from "@chakra-ui/icons"
 import NewProduct from '../components/admin/NewProduct'
 import EditProduct from '../components/admin/EditProduct'
 import AddProductType from '../components/admin/AddProductType'
-import Users from '../components/admin/Users'
-import Orders from '../components/admin/Orders'
+import DeleteProductType from '../components/admin/DeleteProductType'
 import AddArticle from '../components/admin/AddArticle'
 import EditArticle from '../components/admin/EditArticle'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons';
@@ -29,8 +28,7 @@ const Admin = observer(() => {
     const { isOpen: isNewProductOpen, onOpen: onNewProductOpen, onClose: onNewProductClose } = useDisclosure()
     const { isOpen: isEditProductOpen, onOpen: onEditProductOpen, onClose: onEditProductClose } = useDisclosure()
     const { isOpen: isAddProductTypeOpen, onOpen: onAddProductTypeOpen, onClose: onAddProductTypeClose } = useDisclosure()
-    const { isOpen: isUsersOpen, onOpen: onUsersOpen, onClose: onUsersClose } = useDisclosure()
-    const { isOpen: isOrdersOpen, onOpen: onOrdersOpen, onClose: onOrdersClose } = useDisclosure()
+    const { isOpen: isDeleteProductTypeOpen, onOpen: onDeleteProductTypeOpen, onClose: onDeleteProductTypeClose } = useDisclosure()
     const { isOpen: isAddArticleOpen, onOpen: onAddArticleOpen, onClose: onAddArticleClose } = useDisclosure()
     const { isOpen: isEditArticleOpen, onOpen: onEditArticleOpen, onClose: onEditArticleClose } = useDisclosure()
 
@@ -124,7 +122,8 @@ const Admin = observer(() => {
             {page === 'Продукти' &&
                 <>
                     <Button onClick={onNewProductOpen}>Добавити новий продукт</Button>
-                    <Button onClick={onAddProductTypeOpen} marginBottom="20px" >Добавити новий тип продукту</Button>
+                    <Button onClick={onAddProductTypeOpen} my="7px" >Добавити новий тип продукту</Button>
+                    <Button onClick={onDeleteProductTypeOpen} marginBottom="20px" >Видалити тип продукту</Button>
 
                     <TableContainer>
                         <Table bg='gray.200' variant='striped' rounded={10}>
@@ -309,12 +308,9 @@ const Admin = observer(() => {
             <AddProductType
                 isOpen={isAddProductTypeOpen}
                 onClose={onAddProductTypeClose} />
-            <Users
-                isOpen={isUsersOpen}
-                onClose={onUsersClose} />
-            <Orders
-                isOpen={isOrdersOpen}
-                onClose={onOrdersClose} />
+            <DeleteProductType
+                isOpen={isDeleteProductTypeOpen}
+                onClose={onDeleteProductTypeClose} />
             <AddArticle
                 isOpen={isAddArticleOpen}
                 onClose={onAddArticleClose}
