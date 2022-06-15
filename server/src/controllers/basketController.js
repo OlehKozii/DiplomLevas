@@ -115,7 +115,7 @@ class basketController {
         }));
 
         Promise.all(basket);
-        res.send(basket);
+        res.send(basket.filter(item => item));
     }
 
     async removeall(req, res, next) {

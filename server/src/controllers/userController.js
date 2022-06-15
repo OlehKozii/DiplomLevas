@@ -153,21 +153,22 @@ class userController {
     }
     async createOrder(req, res) {
         try {
-            const { userID, price } = req.body;
-            const candidate = await user.findOne({ id: userID }).exec()
+            const { userId, basket, price } = req.body;
+            const candidate = await user.findOne({ id: userId }).exec()
             const myorder = new order({
                 id: v4().toString(),
                 price: price,
             })
-            for (let i of candidate.basket) {
+            for (let i of basket) {
                 myorder.basket.push({
                     id: i.id,
                     count: i.count
                 })
-                myorder.save()
             }
-            console.log(myorder.basket);
-            candidate.basket = []
+
+            await myorder.save();
+            candidate.basket = [];
+            candidate.orders.push(myorder.id)
             await candidate.save()
             res.send();
 
@@ -181,24 +182,16 @@ class userController {
             const { user } = req;
             const orders = await order.find({id: { $in: user.orders }}).exec()
 
-            const a = orders.map(async (orderItem) => {
+            const result = await Promise.all(orders.map(async (orderItem) => {
                 const basket = await Promise.all(orderItem.basket.map(async (item) => {
-                    // console.log('id: ', item.id);
                     const product = await goods.findOne({ id: item.id }).exec();
-                    // console.log('product: ', product);
                     if (product) return {...product._doc, count: item.count};
                 }));
                 Promise.all(basket)
-                    .then((basket) => {
-                        orderItem.basket = basket;
-                    })
-                    .then(() => console.log(orderItem));
-                // console.log(basket);
-                // order.basket = basket;
-                // console.log(order);
-            });
-            console.log(orders[1].basket);
-            res.send(orders);
+                return {...orderItem._doc, basket}
+            }));
+            
+            res.send(result);
         } catch (e) {
             console.log(e);
         }

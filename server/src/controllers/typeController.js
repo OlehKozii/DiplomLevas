@@ -29,12 +29,11 @@ class typeController {
 
 
     async delete(req, res, next) {
-        const id = req.params.id;
-        if (!id) {
-            return next(err.badRequest("No type name!"))
-        }
-        const type = awaittype.deleteOne({id}).exec();
-        res.send(type);
+        const { deleteList } = req.body;
+        deleteList?.forEach(async item => {
+            await type.deleteOne({id: item}).exec();
+        });
+        res.send("Types deleted");
     }
 }
 

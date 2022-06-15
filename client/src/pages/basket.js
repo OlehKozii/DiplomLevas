@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { Context } from "../index";
 import { Box, Container, VStack, Flex, Text, Image, Button, NumberDecrementStepper, NumberIncrementStepper, NumberInputStepper, NumberInputField, NumberInput } from '@chakra-ui/react'
 import { DeleteIcon } from "@chakra-ui/icons";
+import { observer } from "mobx-react-lite"
 import axios from '../utils/axios';
 
-const Basket = () => {
+const Basket = observer(() => {
+    const { user } = useContext(Context);
     const [basket, setBasket] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
 
@@ -30,6 +33,15 @@ const Basket = () => {
         setTotalPrice(total);
     }
 
+    async function createOrder() {
+        const response = await axios.post('user/createOrder', {userId: user.user.id, basket, price: totalPrice});
+
+        if(response.status === 200) {
+            setBasket([])
+            setTotalPrice(0)
+        }
+    }
+
     useEffect(() => {
         getBasket()
     }, []);
@@ -40,7 +52,8 @@ const Basket = () => {
                 <VStack> 
                     {basket.map((item, i) => {
                             return (
-                                <Flex key={i} w="100%" h="150px" rounded={10} bg="gray.200" m={4} p="15px 20px 15px 20px" justifyContent="space-between">
+                                
+                                <Flex key={i} w="100%" h="150px" rounded={10} bg="gray.100" m={4} p="15px 20px 15px 20px" justifyContent="space-between">
                                     <Flex>
                                         <Image h="100%" w="auto" rounded={5} src={item.image}/>
                                         <Flex mx={4} my={1} flexDirection="column" justifyContent="space-between">
@@ -67,7 +80,7 @@ const Basket = () => {
                         )}
                     <Flex alignItems="center" alignSelf="end" borderWidth="2px" borderColor="green.300" rounded={5} bg="green.100" p="20px">
                         <Text fontSize="30px" marginRight="30px" color="gray.600">{totalPrice}₴</Text>
-                        <Button colorScheme="green">Купити</Button>
+                        <Button colorScheme="green" onClick={createOrder}>Купити</Button>
                     </Flex>
             </VStack>
             :
@@ -79,6 +92,6 @@ const Basket = () => {
         }
         </Container>
     )
-}
+})
 
 export default Basket; 

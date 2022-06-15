@@ -123,7 +123,7 @@ const Admin = observer(() => {
                 <>
                     <Button onClick={onNewProductOpen}>Добавити новий продукт</Button>
                     <Button onClick={onAddProductTypeOpen} my="7px" >Добавити новий тип продукту</Button>
-                    <Button onClick={onDeleteProductTypeOpen} marginBottom="20px" >Видалити тип продукту</Button>
+                    <Button onClick={onDeleteProductTypeOpen} marginBottom="20px" >Видалити типи продукту</Button>
 
                     <TableContainer>
                         <Table bg='gray.200' variant='striped' rounded={10}>

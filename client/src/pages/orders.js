@@ -57,24 +57,26 @@ const Orders = () => {
   return (
     <Container maxWidth={1080} paddingBottom="200px">
       {orders.length ? (
-        <Accordion defaultIndex={[0]} allowMultiple>
+        <Accordion defaultIndex={[0]} allowMultiple m="50px">
           {orders.map((order) => (
-            <AccordionItem>
+            <AccordionItem bg="gray.100">
               <h2>
                 <AccordionButton>
                   <Flex flex="1" justifyContent="space-between">
                     <Text>{order.time}</Text>
+                    <Text>{order.state}</Text>
                     <Text>{order.price}₴</Text>
                   </Flex>
                   <AccordionIcon />
                 </AccordionButton>
               </h2>
-              <AccordionPanel pb={4}>
+              <AccordionPanel pb={4} bg="gray.100">
                 {order.basket.map((item) => 
-                    <Box>
-                        <Text>{item.id}</Text>
-                        <Text>{item.count}</Text>
-                    </Box> 
+                    <Flex m="0 30px 0 60px" justifyContent="space-between" alignItems="center">
+                        <Image src={item.image} h="80px" />
+                        <Text>Кількість: {item.count}</Text>
+                        <Text>{item.price}₴</Text>
+                    </Flex> 
                 )}
               </AccordionPanel>
             </AccordionItem>
