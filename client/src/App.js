@@ -3,7 +3,9 @@ import { observer } from "mobx-react-lite";
 import React, { Suspense, useEffect, useContext, useState } from "react";
 import { BrowserRouter, Link } from "react-router-dom";
 import AppRouter from "./components/appRouter";
+import Footer from "./components/Footer";
 import NavBar from "./components/NavBar/NavBar";
+import { Box } from "@chakra-ui/react";
 import jwt_decode from "jwt-decode";
 import { Context } from ".";
 
@@ -37,7 +39,10 @@ const App = observer(() => {
           <Link style={{ color: "#ffffff", textDecoration: "none" }} to="/admin">Click here if you are admin</Link>
         </div>
         <NavBar />
-        <AppRouter />
+        <Box minHeight="calc(100vh - 84px)">
+          <AppRouter />
+        </Box>
+        <Footer />
       </Suspense>
     </BrowserRouter>
   );

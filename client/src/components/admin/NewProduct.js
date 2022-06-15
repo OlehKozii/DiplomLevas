@@ -21,7 +21,7 @@ const NewProduct = observer(({ isOpen, onClose, cb }) => {
     const [info, setInfo] = useState([])
     const [name, setName] = useState("")
     const [price, setPrice] = useState(0)
-    const [typeID, setTypeID] = useState("1")
+    const [typeID, setTypeID] = useState("")
     const [types, setTypes] = useState([])
     const [image, setImage] = useState(null)
     const [imageUrl, setImageUrl] = useState(null)
@@ -77,7 +77,7 @@ const NewProduct = observer(({ isOpen, onClose, cb }) => {
         setInfo([])
         setName("")
         setPrice(0)
-        setTypeID("1")
+        setTypeID("")
         setImage(null)
         setImageUrl(null)
         setState("")
@@ -125,7 +125,7 @@ const NewProduct = observer(({ isOpen, onClose, cb }) => {
                             <FormLabel>Тип</FormLabel>
                             <Select placeholder="Виберіть тип" onChange={(e) => setTypeID(e.target.value)} value={typeID}>
                                 {types.map(i =>
-                                    <option key={i.id}>{i.name}</option>
+                                    <option key={i.id} value={i.id}>{i.name}</option>
                                 )}
                             </Select>
                             <FormLabel>Наявність на складі</FormLabel>

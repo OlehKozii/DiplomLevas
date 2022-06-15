@@ -22,7 +22,7 @@ const OneProduct = observer(({ param }) => {
     }
 
 
-    async function goToGoodPage(){
+    async function goToGoodPage() {
         const name = cyrillicToTranslit.transform(param.name, '-').toLowerCase();
         good.setId(param.id);
         navigator(GOOD_ROUTE + `/${name}`)
@@ -39,7 +39,7 @@ const OneProduct = observer(({ param }) => {
 
 
     return (
-        <Box layerStyle="card" onClick={goToGoodPage}>
+        <Box layerStyle="card" onClick={goToGoodPage} maxWidth="300px">
             <Image w="100%" objectFit="cover" src={param.image} alt="" />
             <Text noOfLines={1} textOverflow="ellipsis" fontSize='20px' my="10px" maxHeight={24} overflow="hidden" alignSelf="start">{param.name}</Text>
             <Text noOfLines={1} textOverflow="ellipsis" fontSize='20px' my="10px" maxHeight={24} overflow="hidden" alignSelf="start" color={COLOR_MAP[param.state]} >{param.state}</Text>
@@ -50,7 +50,7 @@ const OneProduct = observer(({ param }) => {
                         Кошик
                         {/* <ShoppingCartIcon></ShoppingCartIcon> */}
                     </Button>
-                    </div>
+                </div>
             </Flex>
 
         </Box>

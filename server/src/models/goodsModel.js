@@ -55,7 +55,7 @@ const orderSchema = new Schema({
         count: { type: Number, required: true }
     }],
     time: { type: Date, default: Date.now },
-    state: { type: String, enum: ["В обробці", "Відправлено", "Очікує отримання", "Скасовано"], default: "В обробці" }
+    state: { type: String, enum: ["В обробці", "Очікує отримання", "Скасовано"], default: "В обробці" }
 })
 
 

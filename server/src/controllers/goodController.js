@@ -9,9 +9,8 @@ class deviceController {
 
     async create(req, res, next) {
         try {
-            const { name, price, typeID } = req.body;
+            const { name, price, typeID, state } = req.body;
             const file = req.file
-            console.log(req.body.state)
             if (!file) {
                 return next(err.badRequest("No image"))
             }
@@ -25,7 +24,8 @@ class deviceController {
                 state: req.body.state,
                 typeID: typeID,
                 price: price,
-                image: result.url
+                image: result.url,
+                // discount: 
             })
             console.log(myDevice)
             if (req.body.info) {
@@ -53,9 +53,9 @@ class deviceController {
 
     async addType(req, res) {
         const { typeName } = req.body;
-        
+
         const newType = await type.create({
-            id:  v4().toString(),
+            id: v4().toString(),
             name: typeName,
             good: []
         });
@@ -80,7 +80,7 @@ class deviceController {
         if (good.comments) {
             grade = good.comments.reduce((r, c) => r + c.grade, 0) / good.comments.length;
         }
-        return res.send({...good._doc, grade})
+        return res.send({ ...good._doc, grade })
     }
 
     async addComment(req, res, next) {
@@ -130,7 +130,7 @@ class deviceController {
     }
 
     async edit(req, res, next) {
-        const {name, price, typeID, state, info} = req.body;
+        const { name, price, typeID, state, info } = req.body;
         const goodId = req.params.id;
 
         if (!goodId) {

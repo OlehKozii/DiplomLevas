@@ -5,7 +5,9 @@ export const Theme = extendTheme({
     colors: {
         gray: {
             100: "#f7f7f8",
-            200: "#f0f0f0"
+            200: "#f0f0f0",
+            300: "#e6e6e6",
+            400: "#e6e6e6"
         }
     },
     styles: {
@@ -17,15 +19,8 @@ export const Theme = extendTheme({
     },
     layerStyles: {
         card: {
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "space-around",
-            width: '100%',
-            padding: '15px',
+            padding: '5px',
             transition: 'all 0.2s',
-            borderRadius: '10px',
-            backgroundColor: 'gray.200',
             _hover: {
                 cursor: 'pointer',
                 backgroundColor: 'gray.300'

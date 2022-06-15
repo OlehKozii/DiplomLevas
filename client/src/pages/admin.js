@@ -56,7 +56,7 @@ const Admin = observer(() => {
         }
     }
 
-    function onEditProduct({id, name, typeID, image, price, state}) {
+    function onEditProduct({ id, name, typeID, image, price, state }) {
         good.setId(id);
         good.setName(name);
         good.setTypeID(typeID);
@@ -83,7 +83,7 @@ const Admin = observer(() => {
     }
 
     async function setRole(role, id) {
-        const response = await axios.post(`user/setRole/${id}`, {role});
+        const response = await axios.post(`user/setRole/${id}`, { role });
         if (response) {
             getData(MAP['Користувачі']);
         }
@@ -97,7 +97,7 @@ const Admin = observer(() => {
     }
 
     async function setOrderState(state, id) {
-        const response = await axios.put(`user/setOrderState/${id}`, {state});
+        const response = await axios.put(`user/setOrderState/${id}`, { state });
         if (response) {
             getData(MAP['Замовлення']);
         }
@@ -190,7 +190,7 @@ const Admin = observer(() => {
                                             <Select value={user.role} onChange={(e) => setRole(e.target.value, user.id)}>
                                                 <option>customer</option>
                                                 <option>admin</option>
-                                            </Select>  
+                                            </Select>
                                         </Td>
                                         <Td><Button colorScheme="red" onClick={() => deleteUser(user.id)}><DeleteIcon /></Button></Td>
                                     </Tr>
@@ -232,7 +232,6 @@ const Admin = observer(() => {
                                         <Td>
                                             <Select value={order.state} onChange={(e) => setOrderState(e.target.value, order.id)}>
                                                 <option>В обробці</option>
-                                                <option>Відправлено</option>
                                                 <option>Очікує отримання</option>
                                                 <option>Скасовано</option>
                                             </Select>
@@ -258,7 +257,7 @@ const Admin = observer(() => {
                 page === 'Статті' &&
                 <>
                     <Button marginBottom="20px" onClick={onAddArticleOpen}>Добавити статтю</Button>
-                
+
                     <TableContainer>
                         <Table bg='gray.200' variant='striped' rounded={10}>
                             <TableCaption>Список усіх користувачів</TableCaption>

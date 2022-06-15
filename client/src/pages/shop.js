@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import OneProduct from "../components/goodsList/oneProduct";
+import ProductCard from '../components/ProductCard';
 import axios from '../utils/axios';
+import { useMediaQuery } from '@chakra-ui/react';
 import { Box, FormLabel, Container, Select, SimpleGrid, DrawerHeader, DrawerBody, Checkbox, DrawerFooter, Button, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, Flex } from "@chakra-ui/react";
 
 const is = ["В наявності", "Закінчується", "Закінчився", "Очікується"]
@@ -13,6 +15,15 @@ const Shop = () => {
     const [typesList, setTypes] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = React.useRef()
+
+    const [isLargerThan1380] = useMediaQuery('(min-width: 1380px)')
+    const [isLargerThan1130] = useMediaQuery('(min-width: 1130px)')
+    const [isLargerThan855] = useMediaQuery('(min-width: 855px)')
+    const [isLargerThan550] = useMediaQuery('(min-width: 550px)')
+
+    const getColumns = () => {
+        return isLargerThan1380 ? 5 : (isLargerThan1130 ? 4 : (isLargerThan855 ? 3 : (isLargerThan550 ? 2 : 1)));
+    }
 
     const getGoods = async () => {
         let typeurl = [];
@@ -56,14 +67,22 @@ const Shop = () => {
 
     return (
         <>
-            <Container p="30px" maxWidth="1500px">
-                <Button ref={btnRef} colorScheme='teal' onClick={onOpen} marginBottom="15px">
+            <Container p="30px" maxWidth="1500px" display="flex" flexDir="column" alignItems="center">
+                <Button ref={btnRef} colorScheme='teal' onClick={onOpen} marginBottom="15px" w="200px">
                     Фільтри
                 </Button>
-                <SimpleGrid justifyItems="center" minChildWidth='250px' spacing='20px'>
+                <SimpleGrid templateColumns={`repeat(${getColumns()}, 250px)`} justifyItems="center" minChildWidth='250px' spacing='20px'>
                     {goodsList.map((good) => (
-                        <OneProduct key={good.id} param={good} />
+                        <ProductCard key={good.id} param={good} />
                     ))}
+                    {/* <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard /> */}
                 </SimpleGrid>
             </Container>
 

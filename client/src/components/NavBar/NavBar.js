@@ -3,10 +3,8 @@ import { Context } from "../../index";
 import styles from "./NavBar.module.scss";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
-// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-// import FilterFramesIcon from '@mui/icons-material/FilterFrames';
-import { AiOutlineShoppingCart } from "react-icons/ai";
 import { FaJediOrder } from "react-icons/fa";
+import { IoExitOutline, IoCart } from "react-icons/io5"
 import { Link } from "react-router-dom";
 import { SHOP_ROUTE, BASKET_ROUTE, MAIN_ROUTE, NEWS_ROUTE, SIGN_IN, ORDERS } from "../../routes/const";
 import { SimpleGrid, Image, Button, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerHeader, DrawerCloseButton, DrawerBody, Text, Box, useMediaQuery } from "@chakra-ui/react";
@@ -39,21 +37,23 @@ const NavBar = observer(() => {
         {!isSmallerThan830 ?
           <Box display="flex" justifyContent='end' alignItems='center' px="20px">
             {user._isAuth ?
-              <div>
-                <Link to={BASKET_ROUTE}>
-                  {/* <ShoppingCartIcon></ShoppingCartIcon> */}
-                  Кошик
+              <Box display="flex" alignItems='center' px="20px">
+                <Link to={BASKET_ROUTE} style={{ margin: "0 10px" }}>
+                  <IoCart size={30} />
                 </Link>
-                <Link to={ORDERS}>
-                  <FaJediOrder />
-                  {/* <FilterFramesIcon></FilterFramesIcon> */}
+
+                <Link to={ORDERS} style={{ margin: "0 10px" }}>
+                  <FaJediOrder size={30} />
                 </Link>
-                <Link to="/" onClick={() => logOut()}>Вийти</Link>
-              </div>
+
+                <Link to="/" onClick={() => logOut()} style={{ margin: "0 10px" }}>
+                  <IoExitOutline size={30} />
+                </Link>
+              </Box>
               :
-              <div>
+              <Box px="20px">
                 <Link to={SIGN_IN}>Логін</Link>
-              </div>
+              </Box>
             }
           </Box>
           :
