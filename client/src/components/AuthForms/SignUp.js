@@ -7,6 +7,7 @@ import { SIGN_IN } from "../../routes/const";
 import { Link } from "react-router-dom";
 import { Button, Input, Heading, FormControl } from "@chakra-ui/react";
 import jwtDecode from "jwt-decode";
+import yupValidation from "../../validation/singup"
 
 
 const SignUpForm = observer(() => {
@@ -15,6 +16,12 @@ const SignUpForm = observer(() => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [nameerr, setNameerr] = useState('');
+    const [emailerr, setEmailerr] = useState('');
+    const [passworderr, setPassworderr] = useState('');
+    const [namedirt, setNamedirt] = useState(false);
+    const [emaildirt, setEmaildirt] = useState(false);
+    const [passworddirt, setPassworddirt] = useState(false);
 
     const submit = async () => {
         const response = await axios.post('user/registration', { name, email, password });
@@ -37,8 +44,18 @@ const SignUpForm = observer(() => {
         <FormControl maxW='500px' bg='gray.200' rounded={10} p="20px" display='flex' flexDirection="column" alignItems="center">
             <Heading my="20px">Реєстрація</Heading>
             <Input bg='gray.100' w="80%" my="10px" type='text' placeholder="Ім'я" value={name} onChange={(e) => setName(e.target.value)} />
-            <Input bg='gray.100' w="80%" my="10px" type='email' placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <Input bg='gray.100' w="80%" my="10px" type='password' placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input bg='gray.100' w="80%" my="10px" type='email' placeholder="Email" value={email} onBlur={setEmaildirt(true)}
+                onChange={(e) => {
+                    setEmail(e.target.value);
+                    var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+                    if (!re.test(String(e.target.value).toLowerCase())) {
+                        setEmailerr("Неправильна почта")
+                    };
+                }
+
+                }
+            />
+            <Input bg='gray.100' w="80%" my="10px" type='password' placeholder="Пароль" value={password} onBlur={setEmaildirt(true)} onChange={(e) => setPassword(e.target.value)} />
             <Button w="80%" my="10px" colorScheme="teal" onClick={submit}>Зареєструватись</Button>
             <Link to={SIGN_IN}>Увійти</Link>
         </FormControl>

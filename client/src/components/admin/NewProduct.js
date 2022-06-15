@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
     Button,
     Modal,
@@ -25,7 +25,7 @@ const NewProduct = observer(({ isOpen, onClose, cb }) => {
     const [types, setTypes] = useState([])
     const [image, setImage] = useState(null)
     const [imageUrl, setImageUrl] = useState(null)
-    const [state, setState] = useState("")
+    const [state, setState] = useState("В наявності")
     const is = ["В наявності", "Закінчується", "Закінчився", "Очікується"]
 
     const [croppedImage, setCroppedImage] = useState(undefined);
@@ -67,10 +67,10 @@ const NewProduct = observer(({ isOpen, onClose, cb }) => {
                 'content-type': 'multipart/form-data',
             }
         })
-        .then(() => {
-            cb();
-            onClose();
-        })
+            .then(() => {
+                cb();
+                onClose();
+            })
     }
 
     const close = () => {
@@ -123,7 +123,7 @@ const NewProduct = observer(({ isOpen, onClose, cb }) => {
                         </FormControl>
                         <FormControl>
                             <FormLabel>Тип</FormLabel>
-                            <Select placeholder="Виберіть тип" >
+                            <Select placeholder="Виберіть тип" onChange={(e) => setTypeID(e.target.value)} value={typeID}>
                                 {types.map(i =>
                                     <option key={i.id}>{i.name}</option>
                                 )}
