@@ -27,6 +27,9 @@ const App = observer(() => {
       if (data) {
         user.setUser(data)
         user.setIsAuth(true)
+        if (user.user.role === "admin") {
+          user.setIsAdmin(true)
+        }
       }
     }).finally(() => setLoading(false))
   }, [user])

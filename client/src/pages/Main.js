@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ProductCard from "../components/ProductCard";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Slider from "react-slick";
-import { Image, Flex, Text, useMediaQuery } from "@chakra-ui/react";
+import { Image, Flex, Text, useMediaQuery, SimpleGrid } from "@chakra-ui/react";
+import axios from "../utils/axios"
 
 const good = {
     comments: [],
@@ -21,6 +22,7 @@ const Main = () => {
     const [isLargerThan1280] = useMediaQuery('(min-width: 1280px)')
     const [isLargerThan950] = useMediaQuery('(min-width: 950px)')
     const [isLargerThan650] = useMediaQuery('(min-width: 650px)')
+    const [discount, setDiscount] = useState([]);
 
     let settings1 = {
         infinite: true,
@@ -35,10 +37,35 @@ const Main = () => {
     let settings = {
         infinite: true,
         speed: 500,
-        slidesToShow: isLargerThan1280 ? 4 : (isLargerThan950 ? 3 : (isLargerThan650 ? 2 : 1)),
-        slidesToScroll: 1,
+        slidesToShow: 2/*isLargerThan1280 ? 4 : (isLargerThan950 ? 3 : (isLargerThan650 ? 2 : 1))*/,
+        slidesToScroll: 0,
         dots: true
     };
+    const getColumns = () => {
+        let count = discount.length;
+        if (count === 1) {
+            return 1;
+        }
+        else if (count === 2) {
+            return isLargerThan1280 ? count : (isLargerThan950 ? count : (isLargerThan650 ? 2 : 1));
+        }
+        return isLargerThan1280 ? count : (isLargerThan950 ? 3 : (isLargerThan650 ? 2 : 1));
+
+
+    }
+    const getDisc = async () => {
+        const response = await axios.get('good/getSomeDisc');
+        console.log(response.data);
+        if (response.status === 200) {
+            setDiscount(response.data)
+        };
+
+    }
+
+    useEffect(() => {
+        getDisc()
+        console.log(discount)
+    }, [])
 
     return (
         <Flex flexDir="column" justifyContent="space-between" alignItems="center">
@@ -48,16 +75,14 @@ const Main = () => {
                 <Image src="assets/banners/b.png" objectFit="cover" />
             </Slider>
             <Text fontSize="35px" paddingTop="50px">Акційні товари</Text>
-            <Slider {...settings} style={{ width: "80%" }}>
-                <ProductCard param={good} />
-                <ProductCard param={good} />
-                <ProductCard param={good} />
-                <ProductCard param={good} />
-                <ProductCard param={good} />
-                <ProductCard param={good} />
-                <ProductCard param={good} />
-            </Slider>
-        </Flex>
+            <SimpleGrid templateColumns={`repeat(${getColumns()}, 250px)`} justifyItems="center" alignContent="center" spacing='20px'>
+                {discount.map((i) => (
+                    <ProductCard key={i.id} param={i} />
+                ))}
+
+            </SimpleGrid>
+
+        </Flex >
     )
 }
 

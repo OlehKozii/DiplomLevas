@@ -11,7 +11,9 @@ import {
     FormLabel,
     ModalBody,
     ModalFooter,
-    Select
+    Select,
+    Checkbox,
+    Flex
 } from "@chakra-ui/react";
 import axios from '../../utils/axios';
 import { observer } from "mobx-react-lite";
@@ -21,10 +23,12 @@ const NewProduct = observer(({ isOpen, onClose, cb }) => {
     const [info, setInfo] = useState([])
     const [name, setName] = useState("")
     const [price, setPrice] = useState(0)
+    const [priceWithDiscount, setPriceWithDiscount] = useState()
     const [typeID, setTypeID] = useState("")
     const [types, setTypes] = useState([])
     const [image, setImage] = useState(null)
     const [imageUrl, setImageUrl] = useState(null)
+    const [isDiscount, setIsDiscount] = useState(false);
     const [state, setState] = useState("В наявності")
     const is = ["В наявності", "Закінчується", "Закінчився", "Очікується"]
 
@@ -62,6 +66,9 @@ const NewProduct = observer(({ isOpen, onClose, cb }) => {
         formData.append('typeID', typeID)
         formData.append('state', state)
         formData.append('info', JSON.stringify(info))
+        formData.append('isDiscount', isDiscount);
+        if (isDiscount) formData.append('priceWithDiscount', priceWithDiscount);
+
         axios.post('good/create', formData, {
             headers: {
                 'content-type': 'multipart/form-data',
@@ -69,7 +76,7 @@ const NewProduct = observer(({ isOpen, onClose, cb }) => {
         })
             .then(() => {
                 cb();
-                onClose();
+                close();
             })
     }
 
@@ -80,7 +87,10 @@ const NewProduct = observer(({ isOpen, onClose, cb }) => {
         setTypeID("")
         setImage(null)
         setImageUrl(null)
+        setPriceWithDiscount()
+        setIsDiscount(false)
         setState("")
+
         onClose();
     }
 
@@ -122,6 +132,13 @@ const NewProduct = observer(({ isOpen, onClose, cb }) => {
                             <Input placeholder='Ціна' value={price} onChange={(e) => setPrice(Number(e.target.value))} />
                         </FormControl>
                         <FormControl>
+                            <FormLabel>Ціна зі знижкою</FormLabel>
+                            <Flex>
+                                <Checkbox mx="10px" onChange={(e) => setIsDiscount(e.target.checked)} />
+                                <Input placeholder='Ціна зі знижкою' isDisabled={!isDiscount} value={priceWithDiscount} onChange={(e) => setPriceWithDiscount(Number(e.target.value))} />
+                            </Flex>
+                        </FormControl>
+                        <FormControl>
                             <FormLabel>Тип</FormLabel>
                             <Select placeholder="Виберіть тип" onChange={(e) => setTypeID(e.target.value)} value={typeID}>
                                 {types.map(i =>
@@ -140,8 +157,8 @@ const NewProduct = observer(({ isOpen, onClose, cb }) => {
 
                         <FormControl marginBottom="5px" my="15px" display="flex" justifyContent="center" >
                             <Button colorScheme="green"
-                                onClick={addInfo}>Добавити властивості</Button>
-
+                                onClick={addInfo}>Добавити властивості
+                            </Button>
                         </FormControl>
                         {info.map(i =>
                             <FormControl key={i.number} style={{ display: "flex", marginBottom: "5px" }}>

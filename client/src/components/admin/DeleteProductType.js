@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -6,13 +6,8 @@ import {
   ModalContent,
   ModalCloseButton,
   ModalHeader,
-  FormControl,
-  Input,
-  FormLabel,
   ModalBody,
   ModalFooter,
-  Stack,
-  Flex,
   Checkbox,
   SimpleGrid
 } from "@chakra-ui/react";
@@ -39,7 +34,7 @@ const AddProductType = observer(({ isOpen, onClose }) => {
   }
 
   async function deleteTypes() {
-    const response = await axios.post(`type/delete`, {deleteList});
+    const response = await axios.post(`type/delete`, { deleteList });
     if (response.status) {
       getTypes();
       onClose();
@@ -59,12 +54,12 @@ const AddProductType = observer(({ isOpen, onClose }) => {
           <ModalCloseButton />
           <ModalBody pb={6}>
             <SimpleGrid templateColumns="1fr 1fr 1fr">
-              {types && 
-                types.map((type) => 
-                    <Checkbox colorScheme="red" onChange={(e) => e.target.checked ? addTypeToDelete(type.id) : removeTypeFromDeleteList(type.id)}>
-                        {type.name}
-                    </Checkbox>
-              )}
+              {types &&
+                types.map((type) =>
+                  <Checkbox colorScheme="red" onChange={(e) => e.target.checked ? addTypeToDelete(type.id) : removeTypeFromDeleteList(type.id)}>
+                    {type.name}
+                  </Checkbox>
+                )}
             </SimpleGrid>
           </ModalBody>
 

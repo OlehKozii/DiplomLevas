@@ -27,18 +27,15 @@ const SignIn = React.lazy(() => import("../pages/auth/SignIn"));
 // import Good from "../pages/goodsPage"
 // import Auth from "../pages/auth"
 
-export const authRoutes = [
+export const adminRoutes = [
   {
     path: ADMIN_ROUTE,
     element: <Admin />,
   },
-  // {
-  //   path: BASKET_ROUTE,
-  //   element: <Basket />,
-  // },
+
 ];
 
-export const publicRoutes = [
+export const authRoutes = [
   {
     path: ORDERS,
     element: <Orders />
@@ -47,6 +44,10 @@ export const publicRoutes = [
     path: BASKET_ROUTE,
     element: <Basket />,
   },
+];
+
+export const publicRoutes = [
+
   {
     path: MAIN_ROUTE,
     element: <Main />,

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Text } from '@chakra-ui/react';
+import { Text, Box } from '@chakra-ui/react';
 import NewsItem from '../components/news/newsitem';
-import axios from '../utils/axios'; 
+import axios from '../utils/axios';
 
 const News = () => {
+
     const [news, setNews] = useState()
 
     async function getNews() {
@@ -18,20 +19,20 @@ const News = () => {
     }, []);
 
     return (
-        <div>
+        <Box p="60px">
             {news ?
                 news.map((item) => (
-                    <NewsItem 
-                        header={item.header} 
+                    <NewsItem
+                        header={item.header}
                         text={item.text}
                         time={item.time}
                     />))
                 :
-                <Text>
-                    Пусто
-                </Text>
+                <Box position="absolute" top="calc(50% - 84px)" left="calc(50% - 30px)">
+                    <Text fontSize="40px">Пусто</Text>
+                </Box>
             }
-        </div>
+        </Box>
     )
 }
 

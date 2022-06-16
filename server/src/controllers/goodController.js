@@ -1,32 +1,38 @@
 const cloudinary = require("../service/cloudinaryConfig")
 const { upload } = require("../service/multer")
 const { goods, params, type } = require("../models/goodsModel")
+const querystring = require('node:querystring');
 const err = require("../errors/err")
 const { v4 } = require("uuid")
-const { badRequest } = require("../errors/err")
+
+
 
 class deviceController {
 
     async create(req, res, next) {
         try {
-            const { name, price, typeID, state } = req.body;
+            const { name, price, typeID, state, isDiscount } = req.body;
+
             const file = req.file
-            if (!file) {
-                return next(err.badRequest("No image"))
-            }
-            if (req.body.state === "") {
-                req.body.state = "В наявності"
-            }
+            if (!file) return next(err.badRequest("No image"));
+
+            if (state === "") state = "В наявності";
+
             const result = await cloudinary.uploader.upload(file.path, { folder: "avatar" })
-            const myDevice = new goods({
+
+            let newGood = {
                 id: v4().toString(),
                 name: name,
                 state: req.body.state,
                 typeID: typeID,
                 price: price,
                 image: result.url,
-                // discount: 
-            })
+                isDiscount: isDiscount
+            };
+
+            if (isDiscount) newGood.priceWithDiscount = req.body.priceWithDiscount;
+
+            const myDevice = new goods(newGood)
             console.log(myDevice)
             if (req.body.info) {
                 const info = JSON.parse(req.body.info)
@@ -96,14 +102,15 @@ class deviceController {
     }
 
     async getAll(req, res) {
-        const { state, typeID, discount } = req.query
+        const { state, typeID } = req.query
+        const discount = req.query.discount === 'true' ? true : false;
         let filter
         try {
             if (!typeID && !state && !discount) {
                 filter = await goods.find({}).exec()
             }
             if (typeID && state && discount) {
-                filter = await goods.find({ state: state,  /*,discount*/ })
+                filter = await goods.find({ state: state, isDiscount: true })
                     .where('typeID').in(typeID)
                     .exec()
             }
@@ -111,21 +118,40 @@ class deviceController {
                 filter = await goods.find({ state: state }).exec()
             }
             if (state && !typeID && discount) {
-                filter = await goods.find({ state: state/*,discount*/ }).exec()
+                filter = await goods.find({ state: state, isDiscount: true }).exec()
             }
             if (typeID && !state && discount) {
-                filter = await goods.find({ typeID: { $in: typeID }/*,discount*/ }).exec()
+                filter = await goods.find({ typeID: { $in: typeID }, isDiscount: true }).exec()
             }
             if (typeID && !state && !discount) {
                 filter = await goods.find({ typeID: { $in: typeID } }).exec()
             }
             if (!typeID && !state && discount) {
-                filter = await goods.find({ /*,discount*/ }).exec()
+                filter = await goods.find({ isDiscount: true }).exec()
             }
             return res.send(filter)
         } catch (e) {
             console.log(e)
-            next(badRequest("Error"))
+            next(err.badRequest("Error"))
+        }
+    }
+
+    async getSomeDisc(req, res, next) {
+        try {
+            const count = await goods.count({ isDiscount: true });
+            let filter
+            if (count < 3) {
+                filter = await goods.find({ isDiscount: true }).limit(count).exec();
+            }
+            else {
+                var random = Math.floor(Math.random() * count)
+                filter = await goods.find({ isDiscount: true }).limit(4).exec();
+            }
+
+            return res.send(filter)
+        } catch (e) {
+            console.log(e)
+            next(err.badRequest("Error"))
         }
     }
 
@@ -142,7 +168,6 @@ class deviceController {
             return next(err.badRequest("No device"))
         }
 
-        // product = {...product, name, price, typeID, state};
         product.name = name;
         product.price = price;
         product.typeID = typeID;

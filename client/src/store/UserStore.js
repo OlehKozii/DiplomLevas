@@ -4,6 +4,7 @@ import { makePersistable, getPersistedStore } from "mobx-persist-store";
 export default class UserStore {
   constructor() {
     this._isAuth = false;
+    this._isAdmin = false;
     this._user = {};
     makeAutoObservable(this);
     makePersistable(this, {
@@ -20,6 +21,12 @@ export default class UserStore {
     this._isAuth = value;
   }
 
+  get isAdmin() {
+    return this._isAdmin;
+  }
+  setIsAdmin(value) {
+    this._isAdmin = value;
+  }
   get user() {
     return this._user;
   }

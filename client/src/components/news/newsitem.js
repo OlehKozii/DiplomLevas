@@ -1,9 +1,9 @@
 import { Container, Heading, Flex, Text, Spacer } from '@chakra-ui/react'
 import React from 'react'
 
-const article = { "name": "Чому потрібно їсти овочі" }
+const NewsItem = ({ header, text, time }) => {
+    const date = new Date(time);
 
-const NewsItem = ({header, text, time}) => {
     return (
         <Container style={{
             minWidth: '75%', border: "solid", margin: "auto", justifyContent: 'center', marginTop: "15px"
@@ -11,7 +11,7 @@ const NewsItem = ({header, text, time}) => {
             <Flex>
                 <Heading>{header}</Heading>
                 <Spacer />
-                <Text>{time}</Text>
+                <Text>{`${date.getHours()}:${date.getMinutes()}  ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`}</Text>
             </Flex>
 
 

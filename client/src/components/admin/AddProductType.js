@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, } from "react";
 import {
     Button,
     Modal,
@@ -16,9 +16,9 @@ import axios from '../../utils/axios';
 
 function AddProductType({ isOpen, onClose }) {
     const [type, setType] = useState();
-    
+
     async function addType() {
-        const response = axios.post('good/addType', { typeName: type });
+        const response = await axios.post('good/addType', { typeName: type });
         onClose()
     }
 

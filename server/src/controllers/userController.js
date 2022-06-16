@@ -1,9 +1,12 @@
 const { v4 } = require("uuid")
+const stripe = require("stripe")(process.env.stripe_private)
 const user = require("../models/userModel")
 const { article, order, goods } = require("../models/goodsModel")
 const err = require("../errors/err")
 const { createHash, compareHash } = require("../service/bcrypt")
 const generateToken = require("../service/jwt")
+const mailer = require("../service/nodemailer")
+
 
 class userController {
     async registration(req, res, next) {
@@ -54,13 +57,13 @@ class userController {
 
     async setRole(req, res, next) {
         try {
-            const {id} = req.params;
-            const {role} = req.body;
-            const candidate = await user.findOne({id}).exec();
+            const { id } = req.params;
+            const { role } = req.body;
+            const candidate = await user.findOne({ id }).exec();
             if (!candidate) return next(err.badRequest("Cannot set role"));
             candidate.role = role;
             candidate.save();
-            res.send(""); 
+            res.send("");
         } catch (e) {
             console.log(e);
             return next(err.badRequest("Cannot set role"));
@@ -69,9 +72,9 @@ class userController {
 
     async deleteUser(req, res, next) {
         try {
-            const {id} = req.params;
-            const candidate = await user.deleteOne({id}).exec();
-            res.send(""); 
+            const { id } = req.params;
+            const candidate = await user.deleteOne({ id }).exec();
+            res.send("");
         } catch (e) {
             console.log(e);
             return next(err.badRequest("Cannot delete user"));
@@ -153,23 +156,43 @@ class userController {
     }
     async createOrder(req, res) {
         try {
-            const { userId, basket, price } = req.body;
+            const { userId, basket, price, } = req.body;
             const candidate = await user.findOne({ id: userId }).exec()
             const myorder = new order({
                 id: v4().toString(),
                 price: price,
             })
+
             for (let i of basket) {
                 myorder.basket.push({
                     id: i.id,
                     count: i.count
                 })
             }
-
+            let ordermessage = "";
+            let temp
+            for (let i of basket) {
+                temp = await goods.findOne({ id: i.id }).exec()
+                ordermessage += `/${temp.name} ${i.count}шт/     `
+            }
             await myorder.save();
             candidate.basket = [];
             candidate.orders.push(myorder.id)
             await candidate.save()
+            const message = {
+                to: "myshoplevas@gmail.com",
+                subject: 'Було здійснено покупку на сайті',
+                html: `
+                <i>Список товарів:</i>
+                <ul>
+                    <li>Унікальний код замовлення: ${myorder.id} </li>
+                    <li>Ім'я покупця: ${candidate.name} </li>
+                    <li>Почта покупця: ${candidate.email} </li>
+                    <li>Корзина: ${ordermessage} </li>
+                </ul>
+                <p>Дане повідомлення не потребує відповіді.<p>`
+            }
+            mailer(message)
             res.send();
 
         } catch (e) {
@@ -180,17 +203,18 @@ class userController {
     async getOrders(req, res) {
         try {
             const { user } = req;
-            const orders = await order.find({id: { $in: user.orders }}).exec()
+            const orders = await order.find({ id: { $in: user.orders } }).exec()
 
             const result = await Promise.all(orders.map(async (orderItem) => {
-                const basket = await Promise.all(orderItem.basket.map(async (item) => {
+                let basket = await Promise.all(orderItem.basket.map(async (item) => {
                     const product = await goods.findOne({ id: item.id }).exec();
-                    if (product) return {...product._doc, count: item.count};
+                    if (product) return { ...product._doc, count: item.count };
                 }));
                 Promise.all(basket)
-                return {...orderItem._doc, basket}
+                basket = basket.filter(item => item);
+                return { ...orderItem._doc, basket }
             }));
-            
+
             res.send(result);
         } catch (e) {
             console.log(e);
@@ -208,13 +232,13 @@ class userController {
 
     async setOrderState(req, res) {
         try {
-            const {id} = req.params;
-            const {state} = req.body;
-            const candidate = await order.findOne({id}).exec();
+            const { id } = req.params;
+            const { state } = req.body;
+            const candidate = await order.findOne({ id }).exec();
             if (!candidate) return next(err.badRequest("Cannot set state"));
             candidate.state = state;
             candidate.save();
-            res.send(""); 
+            res.send("");
         } catch (e) {
             console.log(e);
             return next(err.badRequest("Cannot set state"));

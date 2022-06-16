@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import OneProduct from "../components/goodsList/oneProduct";
+import React, { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import axios from '../utils/axios';
 import { useMediaQuery } from '@chakra-ui/react';
@@ -28,7 +27,7 @@ const Shop = () => {
     const getGoods = async () => {
         let typeurl = [];
         typeID.forEach((id) => typeurl.push(`typeID=${id}`));
-        const response = await axios.get(`good/getall?${typeurl.join("&")}&state=${state}&discount=${discount}`);
+        const response = await axios.get(`good/getall?state=${state}&discount=${discount}&${typeurl.join("&")}`);
         console.log(response.data);
         if (response.status === 200) setGoods(response.data);
     }
@@ -75,14 +74,6 @@ const Shop = () => {
                     {goodsList.map((good) => (
                         <ProductCard key={good.id} param={good} />
                     ))}
-                    {/* <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard /> */}
                 </SimpleGrid>
             </Container>
 
@@ -95,14 +86,12 @@ const Shop = () => {
                 <DrawerOverlay />
                 <DrawerContent>
                     <DrawerCloseButton />
-                    <DrawerHeader>Фільтер</DrawerHeader>
+                    <DrawerHeader>Фільтр</DrawerHeader>
 
                     <DrawerBody>
                         <Box>
-                            <Select color="black" placeholder='Наявність'>
-                                {is.map((isfilter) =>
-                                    <option key={isfilter} onClick={() => { setState(isfilter); }}>{isfilter}</option>
-                                )}
+                            <Select color="black" placeholder='Наявність' onChange={(e) => setState(e.target.value)}>
+                                {is.map((isfilter) => <option key={isfilter}>{isfilter}</option>)}
                             </Select>
                         </Box>
                         <Flex flexDir="column">
@@ -114,7 +103,7 @@ const Shop = () => {
                         </Flex>
                         <Box>
                             <FormLabel>Гарячі пропозиції</FormLabel>
-                            <Checkbox onClick={() => { setDiscount(!discount); }}>Акційний товар</Checkbox>
+                            <Checkbox onChange={(e) => { setDiscount(e.target.checked); }}>Акційний товар</Checkbox>
                         </Box>
                         <Button variant='outline' mr={3} marginTop="7px" onClick={() => { toDefaults(); }}>
                             Скинути фільтри

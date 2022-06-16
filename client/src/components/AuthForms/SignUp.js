@@ -5,25 +5,23 @@ import axios from '../../utils/axios';
 import { observer } from "mobx-react-lite";
 import { SIGN_IN } from "../../routes/const";
 import { Link } from "react-router-dom";
-import { Button, Input, Heading, FormControl } from "@chakra-ui/react";
+import { Button, Input, Heading, FormControl, FormErrorMessage, Box } from "@chakra-ui/react";
 import jwtDecode from "jwt-decode";
-import yupValidation from "../../validation/singup"
+import signUpSchema from "../../validation/singup";
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 
 
 const SignUpForm = observer(() => {
     const { user } = useContext(Context);
     const navigator = useNavigate();
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [nameerr, setNameerr] = useState('');
-    const [emailerr, setEmailerr] = useState('');
-    const [passworderr, setPassworderr] = useState('');
-    const [namedirt, setNamedirt] = useState(false);
-    const [emaildirt, setEmaildirt] = useState(false);
-    const [passworddirt, setPassworddirt] = useState(false);
 
-    const submit = async () => {
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        resolver: yupResolver(signUpSchema),
+    });
+
+    const submit = async (values) => {
+        const { name, email, password } = values;
         const response = await axios.post('user/registration', { name, email, password });
 
         if (response.status === 200) {
@@ -34,31 +32,56 @@ const SignUpForm = observer(() => {
                 email: decode.email,
                 role: decode.role
             })
+            if (user.user.role === "admin") {
+                user.setIsAdmin(true)
+            }
             user.setIsAuth(true)
             localStorage.setItem("Token", "Bearer " + response.data.token);
             navigator('/');
         };
+        window.location.reload()
     }
 
     return (
-        <FormControl maxW='500px' bg='gray.200' rounded={10} p="20px" display='flex' flexDirection="column" alignItems="center">
+        // <FormControl maxW='500px' bg='gray.200' rounded={10} p="20px" display='flex' flexDirection="column" alignItems="center">
+        //     <Heading my="20px">Реєстрація</Heading>
+        //     <Input bg='gray.100' w="80%" my="10px" type='text' placeholder="Ім'я" value={name} onChange={(e) => setName(e.target.value)} />
+        //     <Input bg='gray.100' w="80%" my="10px" type='email' placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        //     <Input bg='gray.100' w="80%" my="10px" type='password' placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} />
+        //     <Button w="80%" my="10px" colorScheme="teal" onClick={submit}>Зареєструватись</Button>
+        //     <Link to={SIGN_IN}>Увійти</Link>
+        // </FormControl>
+        <Box w='500px' bg='gray.100' rounded={10} p="20px" display='flex' flexDirection="column" alignItems="center">
             <Heading my="20px">Реєстрація</Heading>
-            <Input bg='gray.100' w="80%" my="10px" type='text' placeholder="Ім'я" value={name} onChange={(e) => setName(e.target.value)} />
-            <Input bg='gray.100' w="80%" my="10px" type='email' placeholder="Email" value={email} onBlur={setEmaildirt(true)}
-                onChange={(e) => {
-                    setEmail(e.target.value);
-                    var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-                    if (!re.test(String(e.target.value).toLowerCase())) {
-                        setEmailerr("Неправильна почта")
-                    };
-                }
-
-                }
-            />
-            <Input bg='gray.100' w="80%" my="10px" type='password' placeholder="Пароль" value={password} onBlur={setEmaildirt(true)} onChange={(e) => setPassword(e.target.value)} />
-            <Button w="80%" my="10px" colorScheme="teal" onClick={submit}>Зареєструватись</Button>
-            <Link to={SIGN_IN}>Увійти</Link>
-        </FormControl>
+            <FormControl
+                my="10px"
+                px="40px"
+                isInvalid={!!errors?.name?.message}
+                errortext={errors?.name?.message}
+            >
+                <Input bg='gray.100' placeholder="Name"  {...register("name")} />
+                <FormErrorMessage>{errors?.name?.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl
+                my="10px"
+                px="40px"
+                isInvalid={!!errors?.email?.message}
+                errortext={errors?.email?.message}
+            >
+                <Input bg='gray.100' type='email' placeholder="Email"  {...register("email")} />
+                <FormErrorMessage>{errors?.email?.message}</FormErrorMessage>
+            </FormControl>
+            <FormControl
+                my="10px"
+                px="40px"
+                isInvalid={!!errors?.password?.message}
+                errortext={errors?.password?.message}
+            >
+                <Input bg='gray.100' type='password' placeholder="Пароль" {...register("password")} />
+                <FormErrorMessage>{errors?.password?.message}</FormErrorMessage>
+            </FormControl>
+            <Button w="80%" my="10px" colorScheme="teal" onClick={handleSubmit(submit)}>Увійти</Button>
+        </Box>
     );
 })
 

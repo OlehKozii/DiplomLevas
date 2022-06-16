@@ -20,7 +20,6 @@ const Comment = ({ name, text, time, grade }) => {
 
     return (
         <Box w="100%">
-            {console.log(time)}
             <Flex justifyContent='space-between'>
                 <Text color="gray.600" fontSize='18px' as='b'>{name}</Text>
                 <Text color="gray.400" fontSize='14px'>{`${date.getHours()}:${date.getMinutes()}  ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`}</Text>

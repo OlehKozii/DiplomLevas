@@ -24,6 +24,9 @@ const Admin = observer(() => {
 
     const [page, setPage] = useState('Продукти')
     const [data, setData] = useState([])
+    const [articlename, setArticlename] = useState("")
+    const [articletext, setArticletext] = useState("")
+    const [articleid, setArticleid] = useState("")
 
     const { isOpen: isNewProductOpen, onOpen: onNewProductOpen, onClose: onNewProductClose } = useDisclosure()
     const { isOpen: isEditProductOpen, onOpen: onEditProductOpen, onClose: onEditProductClose } = useDisclosure()
@@ -56,6 +59,14 @@ const Admin = observer(() => {
         }
     }
 
+    const onEditArticle = (article) => {
+        setArticlename(article.header);
+        setArticletext(article.text);
+        setArticleid(article.id)
+        onEditArticleOpen();
+
+    }
+
     function onEditProduct({ id, name, typeID, image, price, state }) {
         good.setId(id);
         good.setName(name);
@@ -65,6 +76,8 @@ const Admin = observer(() => {
         good.setState(state);
         onEditProductOpen();
     }
+
+
 
     async function editArticle(id) {
         const response = await axios.delete(`good/${id}`);
@@ -215,7 +228,7 @@ const Admin = observer(() => {
                 <>
                     <TableContainer>
                         <Table bg='gray.200' variant='striped' rounded={10}>
-                            <TableCaption>Список усіх користувачів</TableCaption>
+                            <TableCaption>Список усіх замовлень</TableCaption>
                             <Thead>
                                 <Tr>
                                     <Th>Ідентифікатор</Th>
@@ -260,7 +273,7 @@ const Admin = observer(() => {
 
                     <TableContainer>
                         <Table bg='gray.200' variant='striped' rounded={10}>
-                            <TableCaption>Список усіх користувачів</TableCaption>
+                            <TableCaption>Список усіх статей</TableCaption>
                             <Thead>
                                 <Tr>
                                     <Th>Ідентифікатор</Th>
@@ -275,8 +288,8 @@ const Admin = observer(() => {
                                     <Tr>
                                         <Td>{article.id}</Td>
                                         <Td>{article.header}</Td>
-                                        <Td>{article.text}</Td>
-                                        <Td><Button colorScheme="teal" onClick={() => editArticle(article.id)}><EditIcon /></Button></Td>
+                                        <Td textOverflow="ellipsis" overflow="hidden" style={{ maxWidth: "201px" }}>{article.text}</Td>
+                                        <Td><Button colorScheme="teal" onClick={() => onEditArticle(article)}><EditIcon /></Button></Td>
                                         <Td><Button colorScheme="red" onClick={() => deleteArticle(article.id)}><DeleteIcon /></Button></Td>
                                     </Tr>
                                 ))}
@@ -316,7 +329,12 @@ const Admin = observer(() => {
                 cb={() => getData(MAP['Статті'])} />
             <EditArticle
                 isOpen={isEditArticleOpen}
-                onClose={onEditArticleClose} />
+                onClose={onEditArticleClose}
+                cb={() => getData(MAP['Статті'])}
+                articletext={articletext}
+                articlename={articlename}
+                articleid={articleid}
+            />
 
         </Container >
 
